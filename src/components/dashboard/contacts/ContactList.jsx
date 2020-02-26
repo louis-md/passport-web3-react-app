@@ -43,11 +43,13 @@ class ContactList extends Component {
                 {/* {{#each contacts}} */}
                 { this.state.listOfContacts.map(contacts => {
                   return (
-                    <div key={contacts._id}>
-                      <Link to={`/contacts/${contacts._id}`}>
-                        <h3>{contacts.firstName}{contacts.lastName}</h3>
-                      </Link>
-                    </div>
+                    <tr>
+                      <td key={contacts._id}>
+                        <Link to={`/contacts/${contacts._id}`}>
+                          <h3 key={contacts._id}>{contacts.firstName}{contacts.lastName}</h3>
+                        </Link>
+                      </td>
+                    </tr>
                   )})
                 }
                 <tr className="table-row">
@@ -61,7 +63,7 @@ class ContactList extends Component {
                 {/* {{/unless}} */}
               </tbody>
             </table>
-            <Link to={`/contacts/new`}>
+            <Link to={`/new`}>
               <span className="navbar-brand font-weight-bold">Create new contact</span>
             </Link>
           </div>

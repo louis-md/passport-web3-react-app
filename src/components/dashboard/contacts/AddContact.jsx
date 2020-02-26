@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import AddFields from './AddFields'
+import AddPostalAddresses from './AddPostalAddresses';
 
 
 class AddContact extends Component {
@@ -10,18 +12,10 @@ class AddContact extends Component {
         firstName:'',
         lastName: '',
         bio: '',
-        secondaryEmails: '',
-        phoneNumbers: '',
-        ethAddresses: '',
-        postalAddresses: {
-            streetName: '',
-            streetNumber: 0,
-            special: '',
-            postCode: 0,
-            city: '',
-            country: '',
-            principalResidency: false
-        },
+        secondaryEmails: [],
+        phoneNumbers: [],
+        ethAddresses: [],
+        postalAddresses: [],
         socialAccounts: {
             googleId: "",
             twitterId: "",
@@ -29,7 +23,7 @@ class AddContact extends Component {
             githubId: "",
             asanaId: "" 
         },
-        avatar: {},
+        avatar: '',
     };
   }
   
@@ -41,15 +35,7 @@ class AddContact extends Component {
     const secondaryEmails = this.state.secondaryEmails;
     const phoneNumbers = this.state.phoneNumbers;
     const ethAddresses = this.state.ethAddresses;
-    const postalAddresses = {
-        streetName: this.state.postalAddresses.streetName,
-        streetNumber:this.state.postalAddresses.streetNumber,
-        special: this.state.postalAddresses.special,
-        postCode:this.state.postalAddresses.postCode,
-        city: this.state.postalAddresses.city,
-        country: this.state.postalAddresses.country,
-        principalResidency: this.state.postalAddresses.principalResidency,
-    };
+    const postalAddresses = this.state.postalAddresses;
 
     const socialAccounts = {
         googleId: this.state.socialAccounts.googleId,
@@ -58,6 +44,8 @@ class AddContact extends Component {
         githubId: this.state.socialAccounts.githubId,
         asanaId: this.state.socialAccounts.asanaId 
     };
+
+
 
     const avatar = {};
     axios
@@ -68,18 +56,10 @@ class AddContact extends Component {
             firstName:'',
             lastName: '',
             bio: '',
-            secondaryEmails: '',
-            phoneNumbers: '',
-            ethAddresses: '',
-            postalAddresses: {
-                streetName: '',
-                streetNumber: 0,
-                special: '',
-                postCode: 0,
-                city: '',
-                country: '',
-                principalResidency: false
-            },
+            secondaryEmails: [],
+            phoneNumbers: [],
+            ethAddresses: [],
+            postalAddresses: [],
             socialAccounts: {
                 googleId: "",
                 twitterId: "",
@@ -97,6 +77,14 @@ class AddContact extends Component {
   handleChange = (event) => {  
       const {name, value} = event.target;
       this.setState({[name]: value});
+  }
+
+  updateFields = (field, value) => {
+    this.setState({[field]: value});
+  }
+
+  updatePostalAddresses = value => {
+    this.setState({ postalAddresses: value });
   }
 
   render(){
@@ -118,74 +106,31 @@ class AddContact extends Component {
                             <input id="contact-lastName" type="text" name="lastName" className="form-control" placeholder="Wozniak" value={this.state.lastName} onChange={ e => this.handleChange(e)}/>
                         </div>
         
-                        <div id="emails">
+                        <div id="emails">                            
                             <div id="fieldEmail" className="form-group">
-                                <label htmlFor="contact-email">Email</label>
-                                <input id="contact-email" type="text" name="secondaryEmails" className="form-control" placeholder="steve.wozniak@apple.com" value={this.state.secondaryEmails} onChange={ e => this.handleChange(e)}/>
-                                <div id="btn-add-email" className="btn btn-secondary btn-sm">Add another email</div>                    
-                                <span id="btn-delete-email" className="btn btn-secondary btn-sm">Delete</span>
+                                <AddFields field="secondaryEmails" title="Email" buttonText="Add another email" placeholder="steve.wozniak@apple.com" value={this.state.secondaryEmails} updateField={() => this.updateFields()} />
                             </div>
                         </div>
                         <div id="phone-numbers">
                             <div id="fieldPhoneNumber" className="form-group">
-                                <label htmlFor="contact-phone">Phone number</label>
-                                <input id="contact-phone" type="text" name="phoneNumbers" className="form-control" value={this.state.phoneNumbers} onChange={ e => this.handleChange(e)}/>
-                                <div id="btn-add-number" className="btn btn-secondary btn-sm">Add another phone number</div>
-                                <span id="btn-delete-number" className="btn btn-secondary btn-sm">Delete</span>
+                                <AddFields field="phoneNumbers" title="Phone numbers" buttonText="Add another phone number" placeholder="+1 (0) 444 333 7744" value={this.state.phoneNumbers} updateField={() => this.updateFields()} />
                             </div>
                         </div>
         
                         <div id="ethAddresses">
-                            <div className="form-group">
-                                <label htmlFor="contact-ethereumAddresses">Ethereum address</label>
-                                <input id="contact-ethereumAddresses" type="text" name="ethAddresses" className="form-control" value={this.state.ethAddresses} onChange={ e => this.handleChange(e)}/>
-                                <div id="btn-add-ethAddress" className="btn btn-secondary btn-sm">Add another ethereum address</div>
-                                <span id="btn-delete-ethAddress" className="btn btn-secondary btn-sm">Delete</span>
+                            <div id="fieldPhoneNumber" className="form-group">
+                                <AddFields field="ethAddresses" title="Ethereum addresses" buttonText="Add another Eth address" placeholder="0xbOiuh547NG5JE584G4jfoei564rj..." value={this.state.ethAddresses} updateField={() => this.updateFields()} />
                             </div>
                         </div>
         
                         <div>Postal Address</div>
-                        <div id="postalAddresses">
-                            <div className="form-group">
-                                <label htmlFor="address-streetName">Street name</label>
-                                <input id="address-streetName" type="text" name="streetName" className="form-control" value={this.state.postalAddresses.streetName} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address-streetNumber">Street number</label>
-                                <input id="address-streetNumber" type="number" name="streetNumber" className="form-control" value={this.state.postalAddresses.streetNumber} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address-special">Special (bis, ter...)</label>
-                                <input id="address-special" type="text" name="special" className="form-control" value={this.state.postalAddresses.special} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address-postCode">Post code</label>
-                                <input id="address-postCode" type="number" name="postCode" className="form-control" value={this.state.postalAddresses.postCode} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address-city">City</label>
-                                <input id="address-city" type="text" name="city" className="form-control" value={this.state.postalAddresses.city} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="address-country">Country</label>
-                                <input id="address-country" type="text" name="country" className="form-control" value={this.state.postalAddresses.country} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <label className="label">Is it the principal residency ?</label>
-                                    <label htmlFor="is-principalResidency">Yes</label>
-                                    <input id="is-principalResidency" type="radio" name="principalResidency" value={this.state.postalAddresses.principalResidency} onChange={ e => this.handleChange(e)}/>
-                                    <label htmlFor="is-not-principalResidency">No</label>
-                                    <input id="is-not-principalResidency" type="radio" name="principalResidency" checked value={this.state.postalAddresses.principalResidency} onChange={ e => this.handleChange(e)}/>
-                            </div>
-                            <span id="btn-delete-postalAddress" className="btn btn-secondary btn-sm">Delete</span>
-                            <hr/>
-                        </div>
-                        <div id="btn-add-postalAddress" className="btn btn-secondary btn-sm">Add another postal address</div>
+                            <AddPostalAddresses value={this.state.postalAddresses} updatePostalAddress={(e) => this.updatePostalAddresses(e)} />
+
 
                         <div><br/><br/>Social Accounts</div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-googleId">Google ID</label>
-                            <input id="socialAccounts-googleId" type="text" name="googleId" className="form-control" value={this.state.socialAccounts.googleId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-googleId" type="text" name="socialAccounts.googleId" className="form-control" value={this.state.socialAccounts.googleId} onChange={ e => this.handleChange(e)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-twitterId">Twitter ID</label>

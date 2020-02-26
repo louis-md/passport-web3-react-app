@@ -51,13 +51,11 @@ class App extends Component {
         <div className="App">
           <Navbar userInSession={this.state.loggedInUser} getUser={this.getTheUser} />
           <Switch>
-            {/* <ProtectedRoute user={this.state.loggedInUser} path='/contacts/:id' component={ContactDetails} /> */}
-            {/* <ProtectedRoute user={this.state.loggedInUser} path='/contacts' component={ContactList} />*/}
-            <ProtectedRoute user={this.state.loggedInUser} path='/' component={Dashboard} /> 
-            <Route exact path='/contacts' render={() => <Login getUser={this.getTheUser}/>} component={ContactList} /> 
-            <Route exact path='/contacts/new' render={() => <Login getUser={this.getTheUser}/>} component={AddContact} />
-            <Route user={this.state.loggedInUser} path='/contacts/:id' component={ContactDetails} />
-            <Route user={this.state.loggedInUser} path='/user/profile' component={ContactDetails} />
+            <ProtectedRoute user={this.state.loggedInUser} path='/contacts/:id' component={ContactDetails} />
+            <ProtectedRoute exact user={this.state.loggedInUser} path='/' component={Dashboard} />
+            <ProtectedRoute user={this.state.loggedInUser} path='/contacts' component={ContactList} /> 
+            <ProtectedRoute user={this.state.loggedInUser} path='/new' component={AddContact} />  
+            <ProtectedRoute user={this.state.loggedInUser} path='/profile/:id' component={ContactDetails} />  
           </Switch>
         </div>
       );
