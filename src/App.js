@@ -9,15 +9,19 @@ import ContactList from             './components/dashboard/contacts/ContactList
 import ContactDetails from          './components/dashboard/contacts/ContactDetails';
 import AddFile from                 './components/dashboard/files/AddFile';
 import AddContact from              './components/dashboard/contacts/AddContact';
+import FileList from                './components/dashboard/files/FileList'
 import AuthService from             './components/auth/auth-service';
 import Login from                   './components/auth/Login';
-import ProtectedRoute from  './components/auth/protected-route';
-import EditContact from './components/dashboard/contacts/EditContact';
+import ProtectedRoute from          './components/auth/protected-route';
+import EditContact from             './components/dashboard/contacts/EditContact';
+import axios from                   'axios'
 
 class App extends Component {
   constructor(props){
     super(props)
-    this.state = { loggedInUser: null };
+    this.state = { 
+      userProfile: null,
+      loggedInUser: null };
     this.service = new AuthService();
   }
   
@@ -27,7 +31,13 @@ class App extends Component {
       .then(response =>{
         this.setState({
           loggedInUser:  response
-        }) 
+        });
+        const userProfile = response.profile;
+        axios.get(`http://localhost:5000/api/contacts/${userProfile}`, {withCredentials:true})
+        .then( responseFromApi =>{
+          const theContact = responseFromApi.data;
+          this.setState({userProfile: theContact});
+        })
       })
       .catch( err =>{
         this.setState({
@@ -49,11 +59,12 @@ class App extends Component {
     if(this.state.loggedInUser){
       return (
         <div className="App">
-          <Navbar userInSession={this.state.loggedInUser} getUser={this.getTheUser} />
+          <Navbar userInSession={this.state.loggedInUser} getUser={this.getTheUser} userProfile={this.state.userProfile}/>
           <Switch>
             <ProtectedRoute user={this.state.loggedInUser} path='/contacts/:id' component={ContactDetails} />
             <ProtectedRoute exact user={this.state.loggedInUser} path='/' component={Dashboard} />
             <ProtectedRoute exact user={this.state.loggedInUser} path='/files/new' component={AddFile}/> } />
+            <ProtectedRoute exact user={this.state.loggedInUser} path='/files/' component={FileList}/> } />
             <ProtectedRoute user={this.state.loggedInUser} path='/contacts' component={ContactList} /> 
             <ProtectedRoute user={this.state.loggedInUser} path='/new' component={AddContact} />  
             <ProtectedRoute user={this.state.loggedInUser} path='/edit/:id' component={EditContact} />

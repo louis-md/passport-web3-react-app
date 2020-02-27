@@ -19,7 +19,7 @@ class AddFile extends Component {
     // this method handles just the file upload
     handleFileUpload = e => {
         console.log("The file to be uploaded is: ", e.target.files[0]);
-        
+
         const owner = this.props.loggedInUser._id
         const uploadData = new FormData();
         // imageUrl => this name has to be the same as in the model since we pass
@@ -31,6 +31,11 @@ class AddFile extends Component {
             // console.log('response is: ', response);
             // after the console.log we can see that response carries 'secure_url' which we can use to update the state 
             this.setState({ fileUrl: response.secure_url, owner: owner });
+            if (this.props.updateAvatar) {
+                const url = this.state.fileUrl;
+                this.props.updateAvatar(url);
+                this.setState({name : "Contact avatar"})
+            }
           })
           .catch(err => {
             console.log("Error while uploading the file: ", err);
@@ -40,7 +45,6 @@ class AddFile extends Component {
     // this method submits the form
     handleSubmit = e => {
         e.preventDefault();
-        
         service.saveNewFile(this.state)
         .then(res => {
             console.log('added: ', res);
@@ -54,19 +58,11 @@ class AddFile extends Component {
     render() {
         return (
           <div>
-            <h2>New File</h2>
             <form onSubmit={e => this.handleSubmit(e)}>
-                <label>Name</label>
-                <input 
-                    type="text" 
-                    name="name" 
-                    value={ this.state.name } 
-                    onChange={ e => this.handleChange(e)} />
-                <label>Description</label>
-                <input 
-                    type="file" 
-                    onChange={(e) => this.handleFileUpload(e)} /> 
-                <button type="submit">Save new file</button>
+                {!this.props.updateAvatar && <label>Name</label>}
+                {!this.props.updateAvatar && <input type="text" name="name" value={ this.state.name } onChange={ e => this.handleChange(e)} />}
+                <input type="file" onChange={(e) => this.handleFileUpload(e)} /> 
+                {!this.props.updateAvatar && <button type="submit">Save new file</button>}
             </form>
           </div>
         );

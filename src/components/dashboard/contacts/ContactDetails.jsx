@@ -72,7 +72,7 @@ class ContactDetails extends Component {
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header p-4">
-                    {/* <span><img style="width: 30px" src={this.state.avatar} alt="profile picture" /></span> */}
+                    {/* <span><img style="width: 30px" src={this.props.loggedinInUser.avatar} alt="profile picture" /></span> */}
                     <h5 className="modal-title text-primary font-weight-bold">{this.state.firstName}{this.state.lastName}</h5>
                 </div>
                 <div className="form-group">

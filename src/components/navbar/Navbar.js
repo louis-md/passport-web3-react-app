@@ -6,12 +6,21 @@ import Login from "../auth/Login";
 class Navbar extends Component {
   constructor(props) {
     super(props);
-    this.state = { loggedInUser: null };
+    this.state = { 
+      // userProfile: this.props.userProfile, 
+      loggedInUser: null };
     this.service = new AuthService();
   }
 
+  // static getDerivedStateFromProps(props, state){
+  //   const userProfile = this.props.userProfile
+  //   this.setState({
+  //     userProfile: this.props.userProfile 
+  //   })
+  // }
+
   componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, loggedInUser: nextProps["userInSession"] });
+    this.setState({ ...this.state, loggedInUser: nextProps["userInSession"]});
   }
 
   logoutUser = () => {
@@ -35,19 +44,24 @@ class Navbar extends Component {
               </Link>
             </span>
             <span className="navbar-brand font-weight-bold">
-              <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>My profile</Link>
+              <Link to="/files" style={{ textDecoration: "none" }}>
+                Files
+              </Link>
             </span>
+            <span className="navbar-brand font-weight-bold">
+              <Link to="/organizations" style={{ textDecoration: "none" }}>
+                Organizations
+              </Link>
+            </span>
+            {/* <span className="navbar-brand font-weight-bold">
+              <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>My profile</Link>
+            </span> */}
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav ml-auto mr-5"></div>
               <div className="my-2 my-sm-0">
                 <Link to="/">
-                  <button
-                    onClick={() => this.logoutUser()}
-                    className="btn btn-secondary btn-sm"
-                  >
-                    <span className="d-flex align-items-center">
-                      Log out&nbsp;&nbsp;
-                    </span>
+                  <button onClick={() => this.logoutUser()} className="btn btn-secondary btn-sm">
+                    <span className="d-flex align-items-center">Log out&nbsp;&nbsp;</span>
                   </button>
                 </Link>
                 <div
@@ -68,6 +82,7 @@ class Navbar extends Component {
                         </button>
                       </div>
                       <Login />
+                      {/* <span><img style="width: 30px" src={this.props.userProfile.avatar} alt="avatar" /></span> */}
                     </div>
                   </div>
                 </div>

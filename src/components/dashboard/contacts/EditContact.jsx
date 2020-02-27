@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AddFields from './AddFields'
 import AddPostalAddresses from './AddPostalAddresses';
-
+import AddFile from './../files/AddFile'
 
 class EditContact extends Component {
   constructor(props){
@@ -38,6 +38,7 @@ class EditContact extends Component {
         const githubId = theContact.socialAccounts.githubId;
         const asanaId = theContact.socialAccounts.asanaId;
           this.setState({
+            avatar: theContact.avatar,
             firstName: theContact.firstName,
             lastName: theContact.lastName,
             bio: theContact.bio,
@@ -55,6 +56,7 @@ class EditContact extends Component {
           })
       } else {
         this.setState({
+            avatar: theContact.avatar,
             firstName: theContact.firstName,
             lastName: theContact.lastName,
             bio: theContact.bio,
@@ -82,6 +84,7 @@ class EditContact extends Component {
     const { params } = this.props.match;
     const firstName = this.state.firstName;
     const lastName = this.state.lastName;
+    const avatar = this.state.avatar;
     const bio = this.state.bio;
     const secondaryEmails = this.state.secondaryEmails;
     const phoneNumbers = this.state.phoneNumbers;
@@ -95,7 +98,6 @@ class EditContact extends Component {
         asanaId: this.state.socialAccounts.asanaId 
     };
 
-    const avatar = "";
     axios
     .put(`http://localhost:5000/api/contacts/${params.id}`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
     .then( () => {
@@ -121,6 +123,10 @@ class EditContact extends Component {
   handleSocialAccountsChange = event => {
     const {name, value} = event.target;
     this.setState({ socialAccounts: {[name]: value}})
+  }
+
+  updateAvatar = value => {
+      this.setState({avatar: value});
   }
 
   render(){
@@ -185,15 +191,10 @@ class EditContact extends Component {
                             <input id="socialAccounts-asanaId" type="text" name="asanaId" className="form-control" value={this.state.socialAccounts.asanaId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="contact-img" className="label-price label">Avatar</label>
-                            <input id="contact-img" type="file" name="avatar" className="form-control" value={this.state.avatar} onChange={ e => this.handleChange(e)}/>
-                            <Link to="/files/new">
-                            <button className="btn btn-secondary btn-sm">
-                                <span className="d-flex align-items-center">
-                                New File
-                                </span>
-                            </button>
-                            </Link>
+                            <label htmlFor="contact-img" className="label-price label" style={{width: '75%', float:"left"}}>Set Avatar <br/><br/></label>                            
+                            <span>
+                            <AddFile updateAvatar={(e) => {this.updateAvatar(e)}}/>
+                            </span>
                         </div>
                         <button type="submit" className="btn btn-secondary btn-sm">Edit contact</button>
                     </div>

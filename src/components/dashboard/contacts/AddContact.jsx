@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AddFields from './AddFields'
 import AddPostalAddresses from './AddPostalAddresses';
-
+import AddFile from './../files/AddFile'
 
 class AddContact extends Component {
   constructor(props){
@@ -139,10 +139,12 @@ class AddContact extends Component {
                             <label htmlFor="socialAccounts-asanaId">Asana ID</label>
                             <input id="socialAccounts-asanaId" type="text" name="asanaId" className="form-control" value={this.state.socialAccounts.asanaId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
-                        {/* <div className="form-group">
-                            <label htmlFor="contact-img" className="label-price label">Avatar</label>
-                            <input id="contact-img" type="file" name="avatar" className="form-control" value={this.state.avatar} onChange={ e => this.handleChange(e)}/>
-                        </div> */}
+                        <div className="form-group">
+                            <label htmlFor="contact-img" className="label-price label" style={{width: '75%', float:"left"}}>Set Avatar <br/><br/></label>                            
+                            <span>
+                            <AddFile updateAvatar={(e) => {this.updateAvatar(e)}}/>
+                            </span>
+                        </div>
                         <button type="submit" className="btn btn-secondary btn-sm">Add to contacts</button>
                     </div>
                 </form>
