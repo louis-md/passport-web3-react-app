@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const service = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:5000/api/files',
   // withCredentials: true // => you might need this when having the users in the app 
 });
 
@@ -20,9 +20,9 @@ export default {
       .catch(errorHandler);
   },
 
-  saveNewThing (newThing) {
+  saveNewFile (newFile) {
     // console.log('new thing is: ', newThing)
-    return service.post('/things/create', newThing)
+    return service.post('/new', newFile)
       .then(res => res.data)
       .catch(errorHandler);
   }

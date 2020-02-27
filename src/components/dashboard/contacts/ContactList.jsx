@@ -11,7 +11,7 @@ class ContactList extends Component {
      };
   }
 
-  getAllContacts = () =>{
+  getAllContacts = () => {
     axios.get(`http://localhost:5000/api/contacts`, {withCredentials:true})
     .then(responseFromApi => {
       console.log(responseFromApi)
@@ -64,7 +64,7 @@ class ContactList extends Component {
               </tbody>
             </table>
             <Link to={`/new`}>
-              <span className="navbar-brand font-weight-bold">Create new contact</span>
+              <button className="btn btn-secondary btn-sm">Create new contact</button>
             </Link>
           </div>
           <div style={{width: '60%', float:"left"}}>

@@ -35,7 +35,7 @@ class Navbar extends Component {
               </Link>
             </span>
             <span className="navbar-brand font-weight-bold">
-              <Link to={`/profile/${this.state.loggedInUser._id}`} style={{ textDecoration: "none" }}>My profile</Link>
+              <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>My profile</Link>
             </span>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav ml-auto mr-5"></div>

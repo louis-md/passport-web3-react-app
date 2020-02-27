@@ -16,13 +16,7 @@ class AddContact extends Component {
         phoneNumbers: [],
         ethAddresses: [],
         postalAddresses: [],
-        socialAccounts: {
-            googleId: "",
-            twitterId: "",
-            facebookId: "",
-            githubId: "",
-            asanaId: "" 
-        },
+        socialAccounts: {},
         avatar: '',
     };
   }
@@ -45,9 +39,7 @@ class AddContact extends Component {
         asanaId: this.state.socialAccounts.asanaId 
     };
 
-
-
-    const avatar = {};
+    const avatar = "";
     axios
     .post("http://localhost:5000/api/contacts", {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
     .then( () => {
@@ -60,21 +52,15 @@ class AddContact extends Component {
             phoneNumbers: [],
             ethAddresses: [],
             postalAddresses: [],
-            socialAccounts: {
-                googleId: "",
-                twitterId: "",
-                facebookId: "",
-                githubId: "",
-                asanaId: "" 
-            },
-            avatar: {},
+            socialAccounts: {},
+            avatar: "",
         });
         this.props.history.push('/contacts');    
     })
     .catch( error => console.log(error) )
   }
 
-  handleChange = (event) => {  
+  handleChange = event => {  
       const {name, value} = event.target;
       this.setState({[name]: value});
   }
@@ -85,6 +71,11 @@ class AddContact extends Component {
 
   updatePostalAddresses = value => {
     this.setState({ postalAddresses: value });
+  }
+
+  handleSocialAccountsChange = event => {
+    const {name, value} = event.target;
+    this.setState({ socialAccounts: {[name]: value}})
   }
 
   render(){
@@ -130,23 +121,23 @@ class AddContact extends Component {
                         <div><br/><br/>Social Accounts</div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-googleId">Google ID</label>
-                            <input id="socialAccounts-googleId" type="text" name="socialAccounts.googleId" className="form-control" value={this.state.socialAccounts.googleId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-googleId" type="text" name="googleId" className="form-control" value={this.state.socialAccounts.googleId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-twitterId">Twitter ID</label>
-                            <input id="socialAccounts-twitterId" type="text" name="twitterId" className="form-control" value={this.state.socialAccounts.twitterId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-twitterId" type="text" name="twitterId" className="form-control" value={this.state.socialAccounts.twitterId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-facebookId">Facebook ID</label>
-                            <input id="socialAccounts-facebookId" type="text" name="facebookId" className="form-control" value={this.state.socialAccounts.facebookId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-facebookId" type="text" name="facebookId" className="form-control" value={this.state.socialAccounts.facebookId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-githubId">Github ID</label>
-                            <input id="socialAccounts-githubId" type="text" name="githubId" className="form-control" value={this.state.socialAccounts.githubId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-githubId" type="text" name="githubId" className="form-control" value={this.state.socialAccounts.githubId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="socialAccounts-asanaId">Asana ID</label>
-                            <input id="socialAccounts-asanaId" type="text" name="asanaId" className="form-control" value={this.state.socialAccounts.asanaId} onChange={ e => this.handleChange(e)}/>
+                            <input id="socialAccounts-asanaId" type="text" name="asanaId" className="form-control" value={this.state.socialAccounts.asanaId} onChange={ e => this.handleSocialAccountsChange(e)}/>
                         </div>
                         {/* <div className="form-group">
                             <label htmlFor="contact-img" className="label-price label">Avatar</label>

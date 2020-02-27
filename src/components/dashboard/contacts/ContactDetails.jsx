@@ -28,22 +28,19 @@ class ContactDetails extends Component {
   }
 
   renderEditForm = () => {
-    if(!this.state.title){
+    if(!this.state){
       this.getSingleContact();
     } else {
-    //                                                    {...props} => so we can have 'this.props.history' in Edit.js
-    //                                                                                          ^
-    //                                                                                          |
       return <EditContact theContact={this.state} getTheContact={this.getSingleContact} {...this.props} />
     }
   }
 
 // DELETE PROJECT:
-  deleteProject = () => {
+  deleteContact = () => {
     const { params } = this.props.match;
-    axios.delete(`http://localhost:5000/api/projects/${params.id}`, {withCredentials:true})
+    axios.delete(`http://localhost:5000/api/contacts/${params.id}`, {withCredentials:true})
     .then( () =>{
-        this.props.history.push('/projects'); // !!!         
+        this.props.history.push('/contacts'); // !!!         
     })
     .catch((err)=>{
         console.log(err)
@@ -78,61 +75,50 @@ class ContactDetails extends Component {
                     {/* <span><img style="width: 30px" src={this.state.avatar} alt="profile picture" /></span> */}
                     <h5 className="modal-title text-primary font-weight-bold">{this.state.firstName}{this.state.lastName}</h5>
                 </div>
-            <div className="form-group">
-
-        <h2>Phone numbers</h2>
-            <ul>
-                {/* {{#each this.state.phoneNumbers}}
-                <li>{{this}}</li>
-                {{/each}} */}
-            </ul>
+                <div className="form-group">
+                  <h2>Phone numbers</h2>
+                  <ul>{this.state.phoneNumbers && this.state.phoneNumbers.map((phoneNumber, index) => {return (<li key={index}>{phoneNumber}</li>)})}</ul>
+                </div>
+                <div>
+                  <h2>Emails</h2>
+                  <ul>{this.state.secondaryEmails && this.state.secondaryEmails.map((secondaryEmail, index) => {return (<li key={index}>{secondaryEmail}</li>)})}</ul>
+                </div>
+                <div>
+                  <h2>Ethereum address</h2>
+                  <ul>{this.state.ethAddresses && this.state.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
+                </div>
+                 <h2>Postal address</h2>
+                  {this.state.postalAddresses && this.state.postalAddresses.map((postalAddress, index) => {return (
+                    <ul>
+                      {postalAddress.streetNumber && <li key={index}>{postalAddress.streetNumber}</li>}
+                      {postalAddress.special && <li key={index}>{postalAddress.special}</li>}
+                      {postalAddress.streetName && <li key={index}>{postalAddress.streetName}</li>}
+                      {postalAddress.city && <li key={index}>{postalAddress.city}</li>}
+                      {postalAddress.postCode && <li key={index}>{postalAddress.postCode}</li>}
+                      {postalAddress.country && <li key={index}>{postalAddress.country}</li>}
+                      {postalAddress.principalResidency && <li key={index}>{postalAddress.principalResidency}</li>}
+                    </ul>
+                    )})}
+                <div>
+                  <h2>Social Accounts</h2>
+                  {this.state.socialAccounts && 
+                    <ul>
+                    {this.state.socialAccounts.googleId && <li>{this.state.socialAccounts.googleId}</li>}
+                    {this.state.socialAccounts.facebookId && <li>{this.state.socialAccounts.facebookId}</li>}
+                    {this.state.socialAccounts.twitterId && <li>{this.state.socialAccounts.twitterId}</li>}
+                    {this.state.socialAccounts.githubId && <li>{this.state.socialAccounts.githubId}</li>}
+                    {this.state.socialAccounts.asanaId && <li>{this.state.socialAccounts.asanaId}</li>}
+                    </ul>
+                    } 
+                <div>
+                    <Link to={`/edit/${this.state._id}`}>
+                    <button className="btn btn-secondary btn-sm">Edit contact</button>
+                    </Link>
+                    <button className="btn btn-secondary btn-sm" onClick={this.deleteContact}>Delete contact</button>
+                </div>
+                </div>
+                </div>
             </div>
-            <div>
-            <h2>Emails</h2>
-            <ul>
-                {/* {{#each this.state.secondaryEmails}}
-                <li>{{this}}</li>
-                {{/each}} */}
-            </ul>
-            </div>
-            <div>
-            <h2>Ethereum address</h2>
-            <ul>
-                {/* {{#each this.state.ethAddresses}}
-                <li>{{this}}</li>
-                {{/each}} */}
-            </ul>
-            </div>
-            <h2>Postal address</h2>
-            <ul>
-            {/* {{#each this.state.postalAddresses}} */}
-            <li>
-                {/* {{#if this.principalResidency }}
-                <h4>Principal Residency</h4> <br>
-                {{else}}
-                <h4>Secondary Residency </h4><br>
-                {{/if}}
-                {{this.streetNumber}} {{this.special}} {{this.streetName}} <br>
-                {{this.postCode}}   {{this.city}} <br>
-                {{this.country}} */}
-            </li>
-            {/* {{/each}} */}
-            </ul>
-            <div>
-            <h2>Social Accounts</h2>
-            <ul>
-                {/* <li>Google : {this.state.socialAccounts.googleId}</li>
-                <li>Twitter : {this.state.socialAccounts.twitterId}</li>
-                <li>Facebook : {this.state.socialAccounts.facebookId}</li>
-                <li>GitHub : {this.state.socialAccounts.githubId}</li> */}
-            </ul>
-            <div>
-                {/* <button className="btn btn-secondary btn-sm"><a href="/contacts/contact-edit/{{contact._id}}" style="color:white">Update contact</a></button>
-                <button className="btn btn-secondary btn-sm"><a href="/contacts/contact-delete/{{contact._id}}" style="color:white">Delete contact</a></button> */}
-            </div>
-            </div>
-            </div>
-        </div>
     //   <div>
     //     <h1>{this.state.title}</h1>
     //     <p>{this.state.description}</p>
