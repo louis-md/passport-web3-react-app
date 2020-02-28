@@ -17,7 +17,8 @@ class Login extends Component {
     .then(() => {
         this.setState({ email: "", password: "" });
         // this.props.getUser(response);
-        window.location.reload(); 
+        window.location.reload();
+        this.props.history.push('/');     
     })
     .catch( error => console.log(error) )
   }

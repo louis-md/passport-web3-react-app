@@ -41,21 +41,41 @@ class FileList extends Component {
 
   componentDidMount() {
     this.getAllFiles();
+    // const script = document.createElement("script");
+
+    // script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
+    // script.async = true;
+    // script.type= "text/javascript";
+
+    // // var myWidget = cloudinary.createUploadWidget({
+    // //   cloudName: 'passport-web3', 
+    // //   uploadPreset: 'my_preset'}, (error, result) => { 
+    // //     if (!error && result && result.event === "success") { 
+    // //       console.log('Done! Here is the image info: ', result.info); 
+    // //     }
+    // //   }
+    // // )
+
+    // // document.getElementById("upload_widget").addEventListener("click", function(){
+    // //     myWidget.open();
+    // //   }, false);
+
+    // document.body.appendChild(script);
   }
 
   render(){
     return(
       <div className="big-container manage-products-wrapper">
-        <h3 className="manage-products-title">Files</h3>
         <div className="modal-dialog">
           <div className="modal-content">
+            <h3 className="manage-products-title">Files<br/><br/></h3>
             <table className="product-manage-table">
-              <thead>
+              {/* <thead>
                 <tr className="table-row">
                   <th className="table-head">File name</th>
                   <th className="table-head">Actions</th>
                 </tr>
-              </thead>
+              </thead> */}
               <tbody>
                 {/* {{#each files}} */}
                 { this.state.listOfFiles.map(files => {
@@ -80,7 +100,8 @@ class FileList extends Component {
                 {/* {{/unless}} */}
               </tbody>
             </table>
-            <Link to={`/new`}>
+            <br/>
+            <Link to={`/files/new`}>
               <span className="btn btn-secondary btn-sm">Save new file</span>
             </Link>
           </div>
@@ -90,10 +111,11 @@ class FileList extends Component {
             {/* <AddContact getData={() => this.getAllContacts()}/> */}
         </div>
           </div>
-        <script src="https://media-library.cloudinary.com/global/all.js"></script>  
-      </div>
-    )
-  }
-}
+        {/* <button id="upload_widget" class="cloudinary-button">Upload files</button> */}
+        <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>  
+        </div>
+            )
+          }
+        }
 
 export default FileList;

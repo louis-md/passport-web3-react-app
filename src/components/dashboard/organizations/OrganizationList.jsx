@@ -2,50 +2,50 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-class FileList extends Component {
+class OrganizationList extends Component {
   constructor(){
       super();
       this.state = { 
-        listOfFiles: [],
+        listOfOrganizations: [],
      };
   }
 
-  getAllFiles = () => {
-    axios.get(`http://localhost:5000/api/files`, {withCredentials:true})
+  getAllOrganizations = () => {
+    axios.get(`http://localhost:5000/api/organizations`, {withCredentials:true})
     .then(responseFromApi => {
       console.log(responseFromApi)
       this.setState({
-        listOfFiles: responseFromApi.data
+        listOfOrganizations: responseFromApi.data
       })
     })
   }
 
   componentDidMount() {
-    this.getAllFiles();
+    this.getAllOrganizations();
   }
 
   render(){
     return(
       <div className="big-container manage-products-wrapper">
-        <h3 className="manage-products-title">Files</h3>
         <div className="modal-dialog">
           <div className="modal-content">
+            <h3 className="manage-products-title">Organizations <br/><br/></h3>
             <table className="product-manage-table">
-              <thead>
+              {/* <thead>
                 <tr className="table-row">
-                  <th className="table-head">File name</th>
+                  <th className="table-head">Organization name</th>
                   <th className="table-head">Actions</th>
                 </tr>
-              </thead>
+              </thead> */}
               <tbody>
                 {/* {{#each files}} */}
-                { this.state.listOfFiles.map(files => {
+                { this.state.listOfOrganizations.map(organization => {
                   return (
                     <tr>
-                      <td key={files._id}>
-                        {/* <Link to={`/contacts/${contacts._id}`}> */}
-                          <h3 key={files._id}>{files.name}</h3>
-                        {/* </Link> */}
+                      <td key={organization._id}>
+                        <Link to={`/organizations/${organization._id}`}>
+                          <h3 key={organization._id}>{organization.title}</h3>
+                        </Link>
                       </td>
                     </tr>
                   )})
@@ -61,8 +61,9 @@ class FileList extends Component {
                 {/* {{/unless}} */}
               </tbody>
             </table>
-            <Link to={`/new`}>
-              <span className="btn btn-secondary btn-sm">Save new file</span>
+            <br/>
+            <Link to={`/organizations/new`}>
+              <span className="btn btn-secondary btn-sm">Create organization</span>
             </Link>
           </div>
           <div style={{width: '60%', float:"left"}}>
@@ -77,4 +78,4 @@ class FileList extends Component {
   }
 }
 
-export default FileList;
+export default OrganizationList;

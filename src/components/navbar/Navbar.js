@@ -6,21 +6,22 @@ import Login from "../auth/Login";
 class Navbar extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      // userProfile: this.props.userProfile, 
-      loggedInUser: null };
+    this.state = {
+      // userProfile: this.props.userProfile,
+      loggedInUser: null
+    };
     this.service = new AuthService();
   }
 
   // static getDerivedStateFromProps(props, state){
   //   const userProfile = this.props.userProfile
   //   this.setState({
-  //     userProfile: this.props.userProfile 
+  //     userProfile: this.props.userProfile
   //   })
   // }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, loggedInUser: nextProps["userInSession"]});
+    this.setState({ ...this.state, loggedInUser: nextProps["userInSession"] });
   }
 
   logoutUser = () => {
@@ -31,6 +32,9 @@ class Navbar extends Component {
   };
 
   render() {
+    if (this.props.userProfile) {
+      console.log(this.props.userProfile.avatar);
+    }
     if (this.state.loggedInUser) {
       return (
         <nav className="navbar navbar-default navbar-expand-md navbar-light sticky-top">
@@ -60,8 +64,13 @@ class Navbar extends Component {
               <div className="navbar-nav ml-auto mr-5"></div>
               <div className="my-2 my-sm-0">
                 <Link to="/">
-                  <button onClick={() => this.logoutUser()} className="btn btn-secondary btn-sm">
-                    <span className="d-flex align-items-center">Log out&nbsp;&nbsp;</span>
+                  <button
+                    onClick={() => this.logoutUser()}
+                    className="btn btn-secondary btn-sm"
+                  >
+                    <span className="d-flex align-items-center">
+                      Log out&nbsp;&nbsp;
+                    </span>
                   </button>
                 </Link>
                 <div
@@ -76,18 +85,30 @@ class Navbar extends Component {
                   <div className="modal-dialog" role="document">
                     <div className="modal-content text-left text-dark">
                       <div className="modal-header p-4">
-                        <h5 className="modal-title text-primary font-weight-bold" id="modal-title-login-oy2nrmz20">Log in</h5>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <h5
+                          className="modal-title text-primary font-weight-bold"
+                          id="modal-title-login-oy2nrmz20"
+                        >
+                          Log in
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
                           <span aria-hidden="true">×</span>
                         </button>
                       </div>
                       <Login />
-                      {/* <span><img style="width: 30px" src={this.props.userProfile.avatar} alt="avatar" /></span> */}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>
+            <img className="avatar" style={{width: '50px', margin: "3px 0 0 25px"}} src={this.props.userProfile && this.props.userProfile.avatar} alt="avatar"/>
+            </Link>
           </div>
         </nav>
       );

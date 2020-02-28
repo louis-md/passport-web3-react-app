@@ -473,3 +473,8 @@ button.btn.btn-link:active {
   text-decoration: none;
 }
 
+.avatar {
+  border-radius: 50%;
+}
+
+

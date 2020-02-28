@@ -78,6 +78,9 @@ class AddContact extends Component {
     this.setState({ socialAccounts: {[name]: value}})
   }
 
+  updateAvatar = value => {
+    this.setState({avatar: value});
+  }
   render(){
     return(
         <div className="modal-dialog">

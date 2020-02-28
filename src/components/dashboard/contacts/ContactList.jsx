@@ -27,16 +27,16 @@ class ContactList extends Component {
   render(){
     return(
       <div className="big-container manage-products-wrapper">
-        <h3 className="manage-products-title">Manage your contacts</h3>
         <div className="modal-dialog">
           <div className="modal-content">
+            <h3 className="manage-products-title">Manage your contacts <br/><br/></h3>
             <table className="product-manage-table">
               <thead>
-                <tr className="table-row">
+                {/* <tr className="table-row">
                   <th className="table-head">Contact's avatar</th>
                   <th className="table-head">Last Name</th>
                   <th className="table-head">First name</th>
-                </tr>
+                </tr> */}
               </thead>
               <tbody>
                 {/* {{#each contacts}} */}
@@ -44,9 +44,14 @@ class ContactList extends Component {
                   return (
                     <tr>
                       <td key={contacts._id}>
+                      <div style={{margin: "5px 0 0 0"}}>
                         <Link to={`/contacts/${contacts._id}`}>
-                          <h3 key={contacts._id}>{contacts.firstName}{contacts.lastName}</h3>
+                          <h3  key={contacts._id}>{contacts.firstName} {contacts.lastName}</h3>
                         </Link>
+                        </div>
+                      </td>
+                      <td>
+                        <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={contacts.avatar && contacts.avatar} alt="avatar"/>
                       </td>
                     </tr>
                   )})
@@ -62,6 +67,7 @@ class ContactList extends Component {
                 {/* {{/unless}} */}
               </tbody>
             </table>
+            <br/>
             <Link to={`/new`}>
               <button className="btn btn-secondary btn-sm">Create new contact</button>
             </Link>

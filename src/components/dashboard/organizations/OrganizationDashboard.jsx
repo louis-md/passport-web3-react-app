@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import ContactList from './contacts/ContactList'
-import FileList from './files/FileList'
-import OrganizationList from './organizations/OrganizationList'
+import PublicOrganizations from './PublicOrganizations'
+import OrganizationList from './OrganizationList'
 
 
 export default class Dashboard extends Component {
@@ -9,10 +8,12 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <span style={{width: '50%', float:"left"}}>
-                <ContactList />    
+                {/* <PublicOrganizations />     */}
+                </span>
+                <span style={{width: '50%', float:"left"}}>
+                {/* <BrowseOrganizations />     */}
                 </span>
                 <span style={{width: '50%', float:"right"}}>
-                <FileList />
                 <OrganizationList />    
                 </span>
             </div>

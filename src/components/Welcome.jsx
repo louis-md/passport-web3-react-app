@@ -13,8 +13,8 @@ export default class Welcome extends Component {
                         <h5>A light & secure web3 contact repository</h5>
                         <br/><br/>
                         <article>
-                            <p>Hello internet traveller. This small website is intended to be a short introduction to the web3 concepts necessary for blockchain-related web development, as well as a nice interface for storing profiles, personal information and contacts in a safe way.</p>
-                            <Link to={`/signup`}><button className="btn btn-secondary btn-sm">Get started!</button></Link>
+                            <p>Hello dear internet traveller. This small website is intended to be a short introduction to the web3 concepts necessary for blockchain web development, as well as a nice interface for storing web3 user profiles and share files in a safe way. </p><br/>
+                            <a href="/signup" style={{color: 'white'}}><button className="btn btn-secondary btn-sm">Get Started!</button></a>
                         </article>
                     </div>
                 </div>

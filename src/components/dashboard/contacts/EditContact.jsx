@@ -193,7 +193,7 @@ class EditContact extends Component {
                         <div className="form-group">
                             <label htmlFor="contact-img" className="label-price label" style={{width: '75%', float:"left"}}>Set Avatar <br/><br/></label>                            
                             <span>
-                            <AddFile updateAvatar={(e) => {this.updateAvatar(e)}}/>
+                            <AddFile loggedInUser={this.props.loggedInUser} updateAvatar={(e) => {this.updateAvatar(e)}}/>
                             </span>
                         </div>
                         <button type="submit" className="btn btn-secondary btn-sm">Edit contact</button>

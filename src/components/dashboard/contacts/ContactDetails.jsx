@@ -72,22 +72,22 @@ class ContactDetails extends Component {
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header p-4">
-                    {/* <span><img style="width: 30px" src={this.props.loggedinInUser.avatar} alt="profile picture" /></span> */}
-                    <h5 className="modal-title text-primary font-weight-bold">{this.state.firstName}{this.state.lastName}</h5>
+                    <h3 className="modal-title text-primary font-weight-bold">{this.state.firstName} {this.state.lastName}</h3>
+                    <span><img className="avatar" style={{width: '50px'}} src={this.state.avatar} alt="profile picture" /></span>
                 </div>
                 <div className="form-group">
-                  <h2>Phone numbers</h2>
+                  <br/><h5>Phone numbers</h5><br/>
                   <ul>{this.state.phoneNumbers && this.state.phoneNumbers.map((phoneNumber, index) => {return (<li key={index}>{phoneNumber}</li>)})}</ul>
                 </div>
                 <div>
-                  <h2>Emails</h2>
+                  <br/><h5>Emails</h5><br/>
                   <ul>{this.state.secondaryEmails && this.state.secondaryEmails.map((secondaryEmail, index) => {return (<li key={index}>{secondaryEmail}</li>)})}</ul>
                 </div>
                 <div>
-                  <h2>Ethereum address</h2>
+                  <br/><h5>Ethereum address</h5><br/>
                   <ul>{this.state.ethAddresses && this.state.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
                 </div>
-                 <h2>Postal address</h2>
+                 <br/><h5>Postal address</h5><br/>
                   {this.state.postalAddresses && this.state.postalAddresses.map((postalAddress, index) => {return (
                     <ul>
                       {postalAddress.streetNumber && <li key={index}>{postalAddress.streetNumber}</li>}
@@ -100,7 +100,7 @@ class ContactDetails extends Component {
                     </ul>
                     )})}
                 <div>
-                  <h2>Social Accounts</h2>
+                  <br/><h5>Social Accounts</h5><br/>
                   {this.state.socialAccounts && 
                     <ul>
                     {this.state.socialAccounts.googleId && <li>{this.state.socialAccounts.googleId}</li>}
@@ -110,6 +110,7 @@ class ContactDetails extends Component {
                     {this.state.socialAccounts.asanaId && <li>{this.state.socialAccounts.asanaId}</li>}
                     </ul>
                     } 
+                <br/>
                 <div>
                     <Link to={`/edit/${this.state._id}`}>
                     <button className="btn btn-secondary btn-sm">Edit contact</button>

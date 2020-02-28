@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import service from '../../../api/upload';
+import { Redirect } from 'react-router-dom'
 
 class AddFile extends Component {
     constructor(props) {
@@ -48,7 +49,7 @@ class AddFile extends Component {
         service.saveNewFile(this.state)
         .then(res => {
             console.log('added: ', res);
-            // here you would redirect to some other page 
+            this.props.history.push('/files')
         })
         .catch(err => {
             console.log("Error while adding the thing: ", err);
