@@ -17,7 +17,7 @@ class CreateOrganization extends Component {
       ethAddresses: [],
       layers: [],
       phoneNumbers: [],
-      website: [],
+      website: "",
       socialLinks: [],
       postalAddresses: [],
       logo: "",
@@ -216,7 +216,7 @@ class CreateOrganization extends Component {
                 </span>
               </div>
               <button type="submit" className="btn btn-secondary btn-sm">
-                Deploy organization
+                Save organization
               </button>
             </div>
           </form>

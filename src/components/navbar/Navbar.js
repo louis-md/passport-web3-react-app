@@ -73,6 +73,7 @@ class Navbar extends Component {
                     </span>
                   </button>
                 </Link>
+
                 <div
                   className="modal fade"
                   id="login-oy2nrmz20"

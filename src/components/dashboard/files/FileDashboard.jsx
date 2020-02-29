@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import FilesFromContacts from './FilesFromContacts'
 import FilesFromOrganizations from './FilesFromOrganizations'
 import FileList from './FileList'
+import Browse from '../Browse'
+
 
 export default class Dashboard extends Component {
     render() {
@@ -14,7 +16,7 @@ export default class Dashboard extends Component {
                     {/* <FilesFromOrganizations />     */}
                 </span>
                 <span style={{width: '50%', float:"left"}}>
-                    {/* <BrowseFiles />     */}
+                    <Browse />    
                 </span>
                 <span style={{width: '50%', float:"right"}}>
                     <FileList />

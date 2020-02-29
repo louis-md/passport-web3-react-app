@@ -29,7 +29,7 @@ class OrganizationList extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Organizations <br/><br/></h3>
+            <h3 className="manage-products-title">Organizations<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">

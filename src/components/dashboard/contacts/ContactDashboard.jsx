@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ContactDetails from './ContactDetails'
 import PublicContacts from './PublicContacts'
 import ContactList from './ContactList'
+import Browse from '../Browse'
 
 export default class Dashboard extends Component {
     render() {
@@ -14,7 +15,7 @@ export default class Dashboard extends Component {
                     {/* <PublicContacts />     */}
                 </span>
                 <span style={{width: '50%', float:"left"}}>
-                    {/* <BrowseContacts />     */}
+                <Browse />    
                 </span>
                 <span style={{width: '50%', float:"right"}}>
                     <ContactList />

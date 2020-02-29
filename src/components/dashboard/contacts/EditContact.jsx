@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import AddFields from './AddFields'
 import AddPostalAddresses from './AddPostalAddresses';
 import AddFile from './../files/AddFile'
