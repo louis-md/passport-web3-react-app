@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-class PublicOrganizations extends Component {
+class Invitations extends Component {
   constructor(props){
       super(props);
   }
@@ -12,7 +12,7 @@ class PublicOrganizations extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Public organizations<br/><br/></h3>
+            <h3 className="manage-products-title">Invitations<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">
@@ -67,4 +67,4 @@ class PublicOrganizations extends Component {
   }
 }
 
-export default PublicOrganizations;
+export default Invitations;

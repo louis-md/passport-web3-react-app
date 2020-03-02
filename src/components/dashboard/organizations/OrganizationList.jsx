@@ -29,7 +29,7 @@ class OrganizationList extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Organizations<br/><br/></h3>
+            <h3 className="manage-products-title">Your organizations<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">
@@ -43,9 +43,14 @@ class OrganizationList extends Component {
                   return (
                     <tr>
                       <td key={organization._id}>
+                      <span>
                         <Link to={`/organizations/${organization._id}`}>
-                          <h3 key={organization._id}>{organization.title}</h3>
+                          <span style={{float:"left"}}><h3 key={organization._id}>{organization.title}</h3></span>
                         </Link>
+                        <span style={{float:"right"}}>
+                          {organization.logo}
+                        </span>
+                        </span>
                       </td>
                     </tr>
                   )})

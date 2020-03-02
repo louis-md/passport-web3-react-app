@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AuthService from './auth-service';
 import { Link } from 'react-router-dom';
+import Login from './Login'
 
 class Signup extends Component {
   constructor(props){
@@ -62,7 +63,18 @@ class Signup extends Component {
                 <input id="password" className="form-control" type="password" name="password" placeholder="************" required value={this.state.password} onChange={ e => this.handleChange(e)} />
               </div>
                 <small>
-                  <p className="text-primary" href="/auth/login"><Link to={"/"}> Do you already have an account? Login</Link></p>
+                  <p className="text-primary">Do you already have an account? Login 
+                  <div
+                  className="modal fade"
+                  id="login-oy2nrmz20"
+                  tabIndex="-1"
+                  role="dialog"
+                  aria-labelledby="login-oy2nrmz20"
+                  style={{ display: "none" }}
+                  aria-hidden="true"
+                >
+                <Login />
+                </div></p>
               </small>
             </div>
               <div className="modal-footer">

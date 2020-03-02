@@ -13,7 +13,6 @@ class ContactList extends Component {
   getAllContacts = () => {
     axios.get(`http://localhost:5000/api/contacts`, {withCredentials:true})
     .then(responseFromApi => {
-      console.log(responseFromApi)
       this.setState({
         listOfContacts: responseFromApi.data
       })
@@ -29,7 +28,7 @@ class ContactList extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Manage your contacts <br/><br/></h3>
+            <h3 className="manage-products-title">Your contacts <br/><br/></h3>
             <table className="product-manage-table">
               <thead>
                 {/* <tr className="table-row">
@@ -68,9 +67,15 @@ class ContactList extends Component {
               </tbody>
             </table>
             <br/>
-            <Link to={`/new`}>
+            <span> 
+            <Link to={`/new/`}>
               <button className="btn btn-secondary btn-sm">Create new contact</button>
             </Link>
+            <span> </span>
+            <Link to={`/import/`}>
+              <button className="btn btn-secondary btn-sm">Import contacts</button>
+            </Link>
+            </span>
           </div>
           <div style={{width: '60%', float:"left"}}>
         </div>

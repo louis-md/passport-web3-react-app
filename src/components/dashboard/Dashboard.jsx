@@ -9,13 +9,13 @@ export default class Dashboard extends Component {
     render() {
         return (
             <div>
-                <Browse />    
+                <Browse />
                 <span style={{width: '50%', float:"left"}}>
-                <ContactList />
+                <FileList />
                 </span>
                 <span style={{width: '50%', float:"right"}}>
-                <FileList />
-                <OrganizationList />    
+                <OrganizationList />
+                <ContactList />
                 </span>
             </div>
         )

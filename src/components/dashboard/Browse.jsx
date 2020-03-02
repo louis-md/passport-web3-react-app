@@ -109,7 +109,6 @@ class Browse extends Component {
     getGraph = () => {
         axios.get(`http://localhost:5000/api/graph`, {withCredentials:true})
         .then(responseFromApi => {
-            console.log(responseFromApi)
             this.setState({
             graph: responseFromApi.data
             })
@@ -128,15 +127,17 @@ class Browse extends Component {
             <div className="react-search-field-demo container">
                 <div>
                     <SearchField
-                    placeholder="Browse contacts, files, eth addresses, organizations... "
+                    placeholder="Browse eth addresses, users, contacts, files, organizations... "
                     onChange={this.onChange}
                     />
+                    <div style={{margin: "0 30px 0 30px"}}>
                     <Results
                     users={this.state.matchedUsers}
                     contacts={this.state.matchedContacts}
                     files={this.state.matchedFiles}
                     organizations={this.state.matchedOrganizations}
                     />
+                    </div>
                 </div>
             </div>
           </div>

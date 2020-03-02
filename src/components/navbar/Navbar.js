@@ -32,9 +32,6 @@ class Navbar extends Component {
   };
 
   render() {
-    if (this.props.userProfile) {
-      console.log(this.props.userProfile.avatar);
-    }
     if (this.state.loggedInUser) {
       return (
         <nav className="navbar navbar-default navbar-expand-md navbar-light sticky-top">
@@ -44,7 +41,7 @@ class Navbar extends Component {
             </a>
             <span className="navbar-brand font-weight-bold">
               <Link to="/contacts" style={{ textDecoration: "none" }}>
-                My contacts
+                Contacts
               </Link>
             </span>
             <span className="navbar-brand font-weight-bold">
@@ -107,7 +104,7 @@ class Navbar extends Component {
                 </div>
               </div>
             </div>
-            <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>
+            <Link to={`/users/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>
             <img className="avatar" style={{width: '50px', margin: "3px 0 0 25px"}} src={this.props.userProfile && this.props.userProfile.avatar} alt="avatar"/>
             </Link>
           </div>

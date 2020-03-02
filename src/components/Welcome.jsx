@@ -10,10 +10,11 @@ export default class Welcome extends Component {
                         <h3 className="modal-title text-primary font-weight-bold">Welcome to Passport Web3</h3>
                     </div>
                     <div className="form-group">
-                        <h5>A light & secure web3 contact repository</h5>
+                        <h5>Private profiles & file sharing using web3.js</h5>
                         <br/><br/>
                         <article>
-                            <p>Hello dear internet traveller. This small website is intended to be a short introduction to the web3 concepts necessary for blockchain web development, as well as a nice interface for storing web3 user profiles and share files in a safe way. </p><br/>
+                            <p>Dear internet traveller,<br/>
+                             This small website is intended to be an introduction to the web3, as well as a nice interface for storing files and web3 user profiles collaboratively. </p><br/><br/>
                             <a href="/signup" style={{color: 'white'}}><button className="btn btn-secondary btn-sm">Get Started!</button></a>
                         </article>
                     </div>

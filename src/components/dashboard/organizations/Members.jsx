@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-class PublicOrganizations extends Component {
+class Members extends Component {
   constructor(props){
       super(props);
   }
@@ -12,7 +12,7 @@ class PublicOrganizations extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Public organizations<br/><br/></h3>
+            <h3 className="manage-products-title">Members<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">
@@ -25,9 +25,9 @@ class PublicOrganizations extends Component {
                 { this.props.members && this.props.members.map(member => {
                   return (
                     <tr>
-                      <td key={member._id}>
-                        <Link to={`/contacts/${member.profile}`}>
-                          <h3 key={member._id}>{member.id}</h3>
+                      <td key={member}>
+                        <Link to={`/users/${member}`}>
+                          <h3 key={member}>{member}</h3>
                         </Link>
                       </td>
                     </tr>
@@ -47,7 +47,7 @@ class PublicOrganizations extends Component {
             <br/>
             <span> 
             <Link to={`/join/`}>
-                    <button className="btn btn-secondary btn-sm">Invite new members</button>
+                    <button className="btn btn-secondary btn-sm">Invite members</button>
                     </Link>
                     <span> </span>
                     <Link to={`/join/`}>
@@ -67,4 +67,4 @@ class PublicOrganizations extends Component {
   }
 }
 
-export default PublicOrganizations;
+export default Members;

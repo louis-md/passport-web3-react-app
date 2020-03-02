@@ -18,6 +18,8 @@ import axios from "axios";
 import OrganizationDashboard from "./components/dashboard/organizations/OrganizationDashboard";
 import CreateOrganization from "./components/dashboard/organizations/CreateOrganization";
 import OrganizationDetails from "./components/dashboard/organizations/OrganizationDetails";
+import JoinOrganization from './components/dashboard/organizations/JoinOrganization'
+import UserDetails from "./components/dashboard/UserDetails";
 
 
 class App extends Component {
@@ -92,6 +94,16 @@ class App extends Component {
               user={this.state.loggedInUser}
               path="/organizations/new"
               component={CreateOrganization}
+            />
+             <ProtectedRoute
+              user={this.state.loggedInUser}
+              path="/users/:id"
+              component={UserDetails}
+            />
+            <ProtectedRoute
+              user={this.state.loggedInUser}
+              path="/join/:id"
+              component={JoinOrganization}
             />
             <ProtectedRoute
               exact

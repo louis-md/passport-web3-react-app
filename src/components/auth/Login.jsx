@@ -16,9 +16,7 @@ class Login extends Component {
     this.service.login(email, password)
     .then(() => {
         this.setState({ email: "", password: "" });
-        // this.props.getUser(response);
-        window.location.reload();
-        this.props.history.push('/');     
+        window.location.assign('/');     
     })
     .catch( error => console.log(error) )
   }

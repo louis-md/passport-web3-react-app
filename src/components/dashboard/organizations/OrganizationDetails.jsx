@@ -2,13 +2,29 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import EditOrganization from './EditOrganization';
-// import AddTask from '../tasks/AddTask';
+import Members from "./Members";
+import FileList from "../files/FileList";
+import ContactList from "../contacts/ContactList";
+import MembershipRequests from "./MembershipRequests.jsx";
+import PartnershipRequests from "./PartnershipRequests.jsx";
+import FilesFromOrganizations from '../files/FilesFromOrganizations';
+import FilesFromUsers from '../files/FilesFromUsers';
+import ContactsFromUsers from '../contacts/ContactsFromUsers'
+import ContactsFromOrganizations from '../contacts/ContactsFromOrganizations'
+import Partners from './Partners'
+import Browse from "../Browse"
+import Owner from './Owner.jsx'
 
 
 class OrganizationDetails extends Component {
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+      organization: {},
+      hasAccessToMyContacts: false,
+      hasAccessToMyFiles: false,
+      userIsMember: false,
+    };
   }
 
   componentDidMount(){
@@ -20,18 +36,59 @@ class OrganizationDetails extends Component {
     axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
     .then( responseFromApi =>{
       const theOrganization = responseFromApi.data;
-      this.setState(theOrganization);
+      if (theOrganization.members.includes(this.props.loggedInUser._id)) {
+        this.setState({organization: theOrganization, userIsMember: true});
+      } else {
+        this.setState({organization: theOrganization, userIsMember: false});
+      }
     })
     .catch((err)=>{
         console.log(err)
     })
   }
 
+  toggleShareContacts = () => {
+    const userId = this.props.loggedInUser._id;
+    const userOrganizations = this.props.loggedInUser.organizations;
+    const targetOrganization = this.state.organization._id;
+    const updatedOrganizations = userOrganizations.map((organizations) => {
+      if (organizations.organizationId === targetOrganization) {
+        console.log("found the organization, now replacing permission")
+        const updatedOrganization = {
+          _id: organizations._id,
+          organizationId: organizations.organizationId,
+          hasAccessToMyContacts: !organizations.hasAccessToMyContacts,
+          hasAccessToMyFiles: organizations.hasAccessToMyFiles
+        }
+        console.log(`new permission: ${JSON.stringify(updatedOrganization)}`)
+        return updatedOrganization;
+      }
+    })
+    console.log(updatedOrganizations)
+    axios.put(
+      `http://localhost:5000/api/users/${userId}`,
+      { organizations: updatedOrganizations},
+      { withCredentials: true }
+    )
+    .then(() => {
+      this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+    })
+    .catch(error => console.log(error));
+  }
+
+  toggleShareFiles() {
+
+  }
+
+  leaveOrganization = () => {
+
+  }
+
   renderEditForm = () => {
-    if(!this.state){
+    if(!this.state.organization){
       this.getSingleOrganization();
     } else {
-      return <EditOrganization theOrganization={this.state} getTheOrganization={this.getSingleOrganization} {...this.props} />
+      return <EditOrganization theOrganization={this.state.organization} getTheOrganization={this.getSingleOrganization} {...this.props} />
     }
   }
 
@@ -69,26 +126,38 @@ class OrganizationDetails extends Component {
 
   render(){
     return(
+      <div >
+        <span style={{width: '50%', float:"left"}}>
+        <div className="modal-dialog"><h1>{this.state.organization.logo}{this.state.organization.title}</h1></div>
+          <Browse />
+         <FileList />
+        <FilesFromUsers />
+        <ContactsFromUsers />
+        <FilesFromOrganizations />
+        <ContactsFromOrganizations />
+        </span>
+        <span style={{width: '50%', float:"right"}}> 
+        <MembershipRequests membershipRequests={this.state.organization.membershipRequests} members={this.state.organization.members} organization={this.state.organization._id} updateOrganization={() => this.getSingleOrganization}/>
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header p-4">
-                    <span><img className='avatar' style={{width: '30px'}} src={this.state.logo} alt="profile picture" /></span>
-                    <h5 className="modal-title text-primary font-weight-bold">{this.state.title}</h5>
+                    <span><img className='avatar' style={{width: '30px'}} src={this.state.organization.logo} alt="profile picture" /></span>
+                    <h5 className="modal-title text-primary font-weight-bold">{this.state.organization.title}</h5>
                 </div>
                 <div className="form-group">
                   <h2>Phone numbers</h2>
-                  <ul>{this.state.phoneNumbers && this.state.phoneNumbers.map((phoneNumber, index) => {return (<li key={index}>{phoneNumber}</li>)})}</ul>
+                  <ul>{this.state.organization.phoneNumbers && this.state.organization.phoneNumbers.map((phoneNumber, index) => {return (<li key={index}>{phoneNumber}</li>)})}</ul>
                 </div>
                 <div>
                   <h2>Emails</h2>
-                  <ul>{this.state.contactEmail && this.state.contactEmail.map((contactEmail, index) => {return (<li key={index}>{contactEmail}</li>)})}</ul>
+                  <ul>{this.state.organization.contactEmail && this.state.organization.contactEmail.map((contactEmail, index) => {return (<li key={index}>{contactEmail}</li>)})}</ul>
                 </div>
                 <div>
                   <h2>Ethereum address</h2>
-                  <ul>{this.state.ethAddresses && this.state.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
+                  <ul>{this.state.organization.ethAddresses && this.state.organization.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
                 </div>
                  <h2>Postal address</h2>
-                  {this.state.postalAddresses && this.state.postalAddresses.map((postalAddress, index) => {return (
+                  {this.state.organization.postalAddresses && this.state.organization.postalAddresses.map((postalAddress, index) => {return (
                     <ul>
                       {postalAddress.streetNumber && <li key={index}>{postalAddress.streetNumber}</li>}
                       {postalAddress.special && <li key={index}>{postalAddress.special}</li>}
@@ -101,24 +170,51 @@ class OrganizationDetails extends Component {
                     )})}
                 <div>
                   <h2>Social Links</h2>
-                  {this.state.socialLinks && 
+                  {this.state.organization.socialLinks && 
                     <ul>
-                    {this.state.socialLinks.googleId && <li>{this.state.socialLinks.googleId}</li>}
-                    {this.state.socialLinks.facebookId && <li>{this.state.socialLinks.facebookId}</li>}
-                    {this.state.socialLinks.twitterId && <li>{this.state.socialLinks.twitterId}</li>}
-                    {this.state.socialLinks.githubId && <li>{this.state.socialLinks.githubId}</li>}
-                    {this.state.socialLinks.asanaId && <li>{this.state.socialLinks.asanaId}</li>}
+                    {this.state.organization.socialLinks.googleId && <li>{this.state.organization.socialLinks.googleId}</li>}
+                    {this.state.organization.socialLinks.facebookId && <li>{this.state.organization.socialLinks.facebookId}</li>}
+                    {this.state.organization.socialLinks.twitterId && <li>{this.state.organization.socialLinks.twitterId}</li>}
+                    {this.state.organization.socialLinks.githubId && <li>{this.state.organization.socialLinks.githubId}</li>}
+                    {this.state.organization.socialLinks.asanaId && <li>{this.state.organization.socialLinks.asanaId}</li>}
                     </ul>
                     } 
                 <div>
-                    <Link to={`/edit/${this.state._id}`}>
-                    <button className="btn btn-secondary btn-sm">Edit organization</button>
-                    </Link>
-                    <button className="btn btn-secondary btn-sm" onClick={this.deleteOrganization}>Delete organization</button>
+                    <br/>
+                    {!this.state.userIsMember &&
+                    <Link to={`/join/${this.state.organization._id}`}>
+                    <button className="btn btn-secondary btn-sm">Join organization</button>
+                    </Link>}
+                    <span> </span>
+                    {this.state.userIsMember && <div>
+                    {this.state.hasAccessToMyContacts && <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.toggleShareContacts}>Stop sharing contacts</button>}
+                    {!this.state.hasAccessToMyContacts && <button className="btn btn-secondary btn-sm" onClick={this.toggleShareContacts}>Share contacts</button>}
+                    <span> </span>
+                    <button className="btn btn-secondary btn-sm" onClick={this.toggleShareFiles}>Share files</button>
+                    <span> </span>
+                    <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.leaveOrganization}>Leave organization</button>
+                    <br/><br/><br/>
+                    </div>}
+                    { this.props.loggedInUser._id == this.state.organization.owner && <div>
+                    <div><h4>Admin priviledges</h4></div><br/>
+                    <Link to={`/edit/${this.state.organization._id}`}>
+                    <button className="btn btn-secondary btn-sm">Edit organization profile</button><span> </span>
+                    </Link><br/><br/>
+                    <button className="btn btn-secondary btn-sm">Manage members list</button><span> </span>
+                    <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.deleteOrganization}>Delete organization</button>
+                </div>}
                 </div>
                 </div>
                 </div>
-            </div>
+                </div>
+                <Members members={this.state.organization.members}/>
+                <Owner owner={this.state.organization.owner}/>
+                <PartnershipRequests />
+                <ContactList />
+                <Partners />
+            </span>
+          </div>
+
     //   <div>
     //     <h1>{this.state.title}</h1>
     //     <p>{this.state.description}</p>

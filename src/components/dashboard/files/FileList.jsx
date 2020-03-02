@@ -15,7 +15,6 @@ class FileList extends Component {
   getAllFiles = () => {
     axios.get(`http://localhost:5000/api/files`, {withCredentials:true})
     .then(responseFromApi => {
-      console.log(responseFromApi)
       this.setState({
         listOfFiles: responseFromApi.data
       })
@@ -83,7 +82,9 @@ class FileList extends Component {
                     <tr>
                       <td key={files._id}>
                         {/* <Link to={`/contacts/${contacts._id}`}> */}
-                          <h3 key={files._id}>{files.name}</h3>
+                        
+                          <span style={{width: '50%', float:"left"}}><h3 key={files._id}>{files.name}</h3></span>
+                          <a href={files.fileUrl}><span style={{width: '50%', float:"right"}} key={files._id}>{files._id}</span></a>
                         {/* </Link> */}
                       </td>
                     </tr>
@@ -102,7 +103,7 @@ class FileList extends Component {
             </table>
             <br/>
             <Link to={`/files/new`}>
-              <span className="btn btn-secondary btn-sm">Save new file</span>
+              <span className="btn btn-secondary btn-sm">Import files</span>
             </Link>
           </div>
           <div style={{width: '60%', float:"left"}}>
