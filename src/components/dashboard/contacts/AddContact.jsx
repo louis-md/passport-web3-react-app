@@ -23,6 +23,7 @@ class AddContact extends Component {
   
   handleFormSubmit = (event) => {
     event.preventDefault();
+    const user = this.props.loggedInUser;
     const firstName = this.state.firstName;
     const lastName = this.state.lastName;
     const bio = this.state.bio;
@@ -40,10 +41,9 @@ class AddContact extends Component {
     };
 
     const avatar = "";
-    axios
-    .post("http://localhost:5000/api/contacts", {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
-    .then( () => {
-        // this.props.getData();
+
+    axios.post("http://localhost:5000/api/contacts", {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
+    .then((response) => {
         this.setState({
             firstName:'',
             lastName: '',
@@ -55,7 +55,16 @@ class AddContact extends Component {
             socialAccounts: {},
             avatar: "",
         });
-        this.props.history.push('/contacts');    
+
+        if (user.contacts) {
+            user.contacts.push(response.data._id)
+        } else user.contacts = response.data._id;
+
+        axios.put(`http://localhost:5000/api/users/${user._id}`, {contacts: user.contacts})
+        .then(() => {
+            console.log("done!")
+            this.props.history.push('/contacts');    
+        }).catch(error => console.log(error))
     })
     .catch( error => console.log(error) )
   }

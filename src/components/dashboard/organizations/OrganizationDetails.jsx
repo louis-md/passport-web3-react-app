@@ -27,8 +27,9 @@ class OrganizationDetails extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getSingleOrganization();
+    this.getUserPermissions();
   }
 
   getSingleOrganization = () => {
@@ -47,6 +48,21 @@ class OrganizationDetails extends Component {
     })
   }
 
+  getUserPermissions = () => {
+    const { params } = this.props.match;
+    const userOrganizations = this.props.loggedInUser.organizations;
+    console.log(params.id)
+  
+    userOrganizations.map((organizations) => {
+      if (organizations.organizationId === params.id) {
+        this.setState({
+          hasAccessToMyContacts: organizations.hasAccessToMyContacts, 
+          hasAccessToMyFiles: organizations.hasAccessToMyFiles})
+      }
+    })
+
+  }
+  
   toggleShareContacts = () => {
     const userId = this.props.loggedInUser._id;
     const userOrganizations = this.props.loggedInUser.organizations;
@@ -64,20 +80,162 @@ class OrganizationDetails extends Component {
         return updatedOrganization;
       }
     })
-    console.log(updatedOrganizations)
-    axios.put(
-      `http://localhost:5000/api/users/${userId}`,
-      { organizations: updatedOrganizations},
-      { withCredentials: true }
-    )
-    .then(() => {
-      this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
-    })
-    .catch(error => console.log(error));
+
+    if (this.state.hasAccessToMyContacts && this.props.loggedInUser.contacts) {
+      const contactsToRemove = this.props.loggedInUser.contacts;
+      const currentContacts = this.state.organization.contactsFromMembers;
+      const updatedContacts = currentContacts.filter((contact) => {
+        if (!contactsToRemove.includes(contact)) {
+          return contact
+        } else return
+      })
+
+      const updatePermissionsCall = axios.put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      );
+  
+      const updateContactsCall = axios.put(
+        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        { contactsFromMembers: updatedContacts},
+        { withCredentials: true }
+      );
+      console.log(`Stop sharing my contacts, removing ${contactsToRemove}. New array is: ${updatedContacts}`)
+      Promise.all([updatePermissionsCall, updateContactsCall])
+      .then(() => {
+        this.getSingleOrganization();
+        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+      })
+      .catch(error => console.log(error));
+
+    } else if (!this.state.hasAccessToMyContacts && this.props.loggedInUser.contacts) {
+      const contactsToAdd = this.props.loggedInUser.contacts;
+      const currentContacts = this.state.organization.contactsFromMembers;
+      if (currentContacts) {
+        currentContacts.concat(contactsToAdd)
+      } else {
+        currentContacts = contactsToAdd
+      }
+
+      const updatePermissionsCall = axios.put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      );
+  
+      const updateContactsCall = axios.put(
+        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        { contactsFromMembers: currentContacts},
+        { withCredentials: true }
+      );
+      console.log(`Start sharing my contacts, adding ${contactsToAdd}. New array: ${currentContacts}`)
+
+      Promise.all([updatePermissionsCall, updateContactsCall])
+      .then(() => {
+        this.getSingleOrganization();
+        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+      })
+      .catch(error => console.log(error));
+
+    } else {
+
+      axios
+      .put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      )
+      .then(() => {
+        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+      })
+      .catch(error => console.log(error));
+    }
+
   }
 
-  toggleShareFiles() {
+  toggleShareFiles = () => {
+    const userId = this.props.loggedInUser._id;
+    const userOrganizations = this.props.loggedInUser.organizations;
+    const targetOrganization = this.state.organization._id;
+    const updatedOrganizations = userOrganizations.map((organizations) => {
+      if (organizations.organizationId === targetOrganization) {
+        const updatedOrganization = {
+          _id: organizations._id,
+          organizationId: organizations.organizationId,
+          hasAccessToMyContacts: organizations.hasAccessToMyContacts,
+          hasAccessToMyFiles: !organizations.hasAccessToMyFiles
+        }
+        return updatedOrganization;
+      }
+    })
 
+    if (this.state.hasAccessToMyFiles && this.props.loggedInUser.files) {
+      const filesToRemove = this.props.loggedInUser.files;
+      const currentFiles = this.state.organization.filesFromMembers;
+      const updatedFiles = currentFiles.filter((file) => {if (!filesToRemove.includes(file)) {
+        return file
+      }
+      })
+
+      const updatePermissionsCall = axios.put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      );
+  
+      const updateFilesCall = axios.put(
+        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        { filesFromMembers: updatedFiles},
+        { withCredentials: true }
+      );
+      console.log(`Stop sharing my files, removing ${filesToRemove}. New array is: ${updatedFiles}`)
+      Promise.all([updatePermissionsCall, updateFilesCall])
+      .then(() => {
+        this.getSingleOrganization();
+        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles})
+      })
+      .catch(error => console.log(error));
+
+    } else if (!this.state.hasAccessToMyFiles && this.props.loggedInUser.files) {
+      const filesToAdd = this.props.loggedInUser.files;
+      const currentFiles = this.state.organization.filesFromMembers;
+      const updatedFiles = currentFiles.concat(filesToAdd);
+
+      const updatePermissionsCall = axios.put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      );
+  
+      const updateFilesCall = axios.put(
+        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        { filesFromMembers: updatedFiles},
+        { withCredentials: true }
+      );
+      console.log(`Start sharing my files, adding ${filesToAdd}. New array: ${updatedFiles}`)
+
+      Promise.all([updatePermissionsCall, updateFilesCall])
+      .then(() => {
+        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles});
+        this.getSingleOrganization();
+      })
+      .catch(error => console.log(error));
+
+    } else {
+
+      axios
+      .put(
+        `http://localhost:5000/api/users/${userId}`,
+        { organizations: updatedOrganizations},
+        { withCredentials: true }
+      )
+      .then(() => {
+        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles})
+        this.getSingleOrganization();
+      })
+      .catch(error => console.log(error));
+    }
   }
 
   leaveOrganization = () => {
@@ -190,8 +348,8 @@ class OrganizationDetails extends Component {
                     {this.state.hasAccessToMyContacts && <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.toggleShareContacts}>Stop sharing contacts</button>}
                     {!this.state.hasAccessToMyContacts && <button className="btn btn-secondary btn-sm" onClick={this.toggleShareContacts}>Share contacts</button>}
                     <span> </span>
-                    <button className="btn btn-secondary btn-sm" onClick={this.toggleShareFiles}>Share files</button>
-                    <span> </span>
+                    {this.state.hasAccessToMyFiles && <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.toggleShareFiles}>Stop sharing files</button>}
+                    {!this.state.hasAccessToMyFiles && <button className="btn btn-secondary btn-sm" onClick={this.toggleShareFiles}>Share files</button>}<span> </span><br/><br/>
                     <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.leaveOrganization}>Leave organization</button>
                     <br/><br/><br/>
                     </div>}

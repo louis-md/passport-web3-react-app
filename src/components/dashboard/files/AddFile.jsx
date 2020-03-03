@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import service from '../../../api/upload';
 import { Redirect } from 'react-router-dom'
+import axios from "axios";
 
 class AddFile extends Component {
     constructor(props) {
@@ -23,14 +24,10 @@ class AddFile extends Component {
 
         const owner = this.props.loggedInUser._id
         const uploadData = new FormData();
-        // imageUrl => this name has to be the same as in the model since we pass
-        // req.body to .create() method when creating a new thing in '/api/things/create' POST route
         uploadData.append("fileUrl", e.target.files[0]);
         
         service.handleUpload(uploadData)
         .then(response => {
-            // console.log('response is: ', response);
-            // after the console.log we can see that response carries 'secure_url' which we can use to update the state 
             this.setState({ fileUrl: response.secure_url, owner: owner });
             if (this.props.updateAvatar) {
                 const url = this.state.fileUrl;
@@ -46,10 +43,19 @@ class AddFile extends Component {
     // this method submits the form
     handleSubmit = e => {
         e.preventDefault();
+        const user = this.props.loggedInUser;
         service.saveNewFile(this.state)
         .then(res => {
             console.log('added: ', res);
-            this.props.history.push('/files')
+            if (user.files) {
+                user.files.push(res._id)
+            } else user.files = res._id;
+
+            axios.put(`http://localhost:5000/api/users/${user._id}`, {files: user.files})
+            .then(() => {
+                console.log("done!")
+                this.props.history.push('/files');
+            })    
         })
         .catch(err => {
             console.log("Error while adding the thing: ", err);
