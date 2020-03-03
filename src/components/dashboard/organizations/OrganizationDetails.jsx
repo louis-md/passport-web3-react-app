@@ -20,46 +20,45 @@ class OrganizationDetails extends Component {
   constructor(props){
     super(props);
     this.state = {
-      organization: {},
-      hasAccessToMyContacts: false,
-      hasAccessToMyFiles: false,
-      userIsMember: false,
+      organization: null,
+      hasAccessToMyContacts: null,
+      hasAccessToMyFiles: null,
+      userIsMember: null,
     };
   }
 
-  componentDidMount() {
-    this.getSingleOrganization();
-    this.getUserPermissions();
-  }
-
   getSingleOrganization = () => {
-    const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
-    .then( responseFromApi =>{
-      const theOrganization = responseFromApi.data;
-      if (theOrganization.members.includes(this.props.loggedInUser._id)) {
-        this.setState({organization: theOrganization, userIsMember: true});
+    console.log("getting organization")
+      const { params } = this.props.match;
+      const organizationId = params.id;
+      const graph = this.props.graph;
+      const currentOrganization = graph[3].reduce(organization => {
+        if (organizationId.includes(organization._id)) {
+          return organization
+        }
+      })
+      if (currentOrganization.members.includes(this.props.loggedInUser._id)) {
+        this.setState({organization: currentOrganization, userIsMember: true});
       } else {
-        this.setState({organization: theOrganization, userIsMember: false});
+        this.setState({organization: currentOrganization, userIsMember: false});
       }
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
   }
 
   getUserPermissions = () => {
     const { params } = this.props.match;
     const userOrganizations = this.props.loggedInUser.organizations;
-    console.log(params.id)
-  
-    userOrganizations.map((organizations) => {
+    const updatedPermissions = userOrganizations.reduce((organizations) => {
       if (organizations.organizationId === params.id) {
-        this.setState({
-          hasAccessToMyContacts: organizations.hasAccessToMyContacts, 
-          hasAccessToMyFiles: organizations.hasAccessToMyFiles})
+        return {
+        hasAccessToMyContacts: organizations.hasAccessToMyContacts,
+        hasAccessToMyFiles: organizations.hasAccessToMyFiles
+      }
       }
     })
+
+    this.setState({
+      hasAccessToMyContacts: updatedPermissions.hasAccessToMyContacts, 
+      hasAccessToMyFiles: updatedPermissions.hasAccessToMyFiles})
 
   }
   
@@ -104,19 +103,21 @@ class OrganizationDetails extends Component {
       console.log(`Stop sharing my contacts, removing ${contactsToRemove}. New array is: ${updatedContacts}`)
       Promise.all([updatePermissionsCall, updateContactsCall])
       .then(() => {
-        this.getSingleOrganization();
-        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts});
       })
       .catch(error => console.log(error));
 
     } else if (!this.state.hasAccessToMyContacts && this.props.loggedInUser.contacts) {
       const contactsToAdd = this.props.loggedInUser.contacts;
       const currentContacts = this.state.organization.contactsFromMembers;
+      var updatedContacts;
       if (currentContacts) {
-        currentContacts.concat(contactsToAdd)
+        console.log("coucou")
+        updatedContacts = currentContacts.concat(contactsToAdd)
       } else {
-        currentContacts = contactsToAdd
+        updatedContacts = contactsToAdd
       }
+      console.log(`${currentContacts}`)
 
       const updatePermissionsCall = axios.put(
         `http://localhost:5000/api/users/${userId}`,
@@ -126,15 +127,14 @@ class OrganizationDetails extends Component {
   
       const updateContactsCall = axios.put(
         `http://localhost:5000/api/organizations/${targetOrganization}`,
-        { contactsFromMembers: currentContacts},
+        { contactsFromMembers: updatedContacts},
         { withCredentials: true }
       );
-      console.log(`Start sharing my contacts, adding ${contactsToAdd}. New array: ${currentContacts}`)
+      console.log(`Start sharing my contacts, adding ${contactsToAdd}. New array: ${updatedContacts}`)
 
       Promise.all([updatePermissionsCall, updateContactsCall])
       .then(() => {
-        this.getSingleOrganization();
-        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts})
+        this.setState({hasAccessToMyContacts: !this.state.hasAccessToMyContacts});
       })
       .catch(error => console.log(error));
 
@@ -192,8 +192,7 @@ class OrganizationDetails extends Component {
       console.log(`Stop sharing my files, removing ${filesToRemove}. New array is: ${updatedFiles}`)
       Promise.all([updatePermissionsCall, updateFilesCall])
       .then(() => {
-        this.getSingleOrganization();
-        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles})
+        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles});
       })
       .catch(error => console.log(error));
 
@@ -218,7 +217,6 @@ class OrganizationDetails extends Component {
       Promise.all([updatePermissionsCall, updateFilesCall])
       .then(() => {
         this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles});
-        this.getSingleOrganization();
       })
       .catch(error => console.log(error));
 
@@ -231,8 +229,7 @@ class OrganizationDetails extends Component {
         { withCredentials: true }
       )
       .then(() => {
-        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles})
-        this.getSingleOrganization();
+        this.setState({hasAccessToMyFiles: !this.state.hasAccessToMyFiles});
       })
       .catch(error => console.log(error));
     }
@@ -285,14 +282,18 @@ class OrganizationDetails extends Component {
   render(){
     return(
       <div >
+        {this.props.graph && !this.state.organization && this.getSingleOrganization()}
+        {((this.state.hasAccessToMyFiles === null) || (this.state.hasAccessToMyFiles === null))&& this.getUserPermissions()}
+        {this.state.organization && <div>
         <span style={{width: '50%', float:"left"}}>
-        <div className="modal-dialog"><h1>{this.state.organization.logo}{this.state.organization.title}</h1></div>
-          <Browse />
-         <FileList />
-        <FilesFromUsers />
-        <ContactsFromUsers />
-        <FilesFromOrganizations />
-        <ContactsFromOrganizations />
+        <div className="modal-dialog"><img className="avatar" style={{ verticalAlign: 'middle', width: '60px', float:"left", margin:"0 8px 0 0"}} src={this.state.organization.logo && this.state.organization.logo} alt="avatar"/><span><h1>{this.state.organization.title}</h1></span></div>
+
+        <Browse graph={this.props.graph}/>
+        <FileList graph={this.props.graph} files={this.state.organization.files} title={`${this.state.organization.title} Files`}/>
+        <FileList graph={this.props.graph} files={this.state.organization.filesFromMembers} title={`Files shared by ${this.state.organization.title} members`}/>
+        <FileList graph={this.props.graph} files={this.state.organization.filesFromPartners} title={`Files shared by ${this.state.organization.title} partners`}/>
+        <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromMembers} title={`Contacts shared by ${this.state.organization.title} members`}/>
+        <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromPartners} title={`Contacts shared by ${this.state.organization.title} partners`}/>
         </span>
         <span style={{width: '50%', float:"right"}}> 
         <MembershipRequests membershipRequests={this.state.organization.membershipRequests} members={this.state.organization.members} organization={this.state.organization._id} updateOrganization={() => this.getSingleOrganization}/>
@@ -367,10 +368,11 @@ class OrganizationDetails extends Component {
                 </div>
                 <Members members={this.state.organization.members}/>
                 <Owner owner={this.state.organization.owner}/>
+                <ContactList graph={this.props.graph} contacts={this.state.organization.contacts} title={`${this.state.organization.title} contacts`}/>
                 <PartnershipRequests />
-                <ContactList />
                 <Partners />
             </span>
+            </div>}
           </div>
 
     //   <div>

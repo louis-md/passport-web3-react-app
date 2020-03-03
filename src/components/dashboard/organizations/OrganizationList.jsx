@@ -13,7 +13,6 @@ class OrganizationList extends Component {
   getAllOrganizations = () => {
     axios.get(`http://localhost:5000/api/organizations`, {withCredentials:true})
     .then(responseFromApi => {
-      console.log(responseFromApi)
       this.setState({
         listOfOrganizations: responseFromApi.data
       })
@@ -48,7 +47,7 @@ class OrganizationList extends Component {
                           <span style={{float:"left"}}><h3 key={organization._id}>{organization.title}</h3></span>
                         </Link>
                         <span style={{float:"right"}}>
-                          {organization.logo}
+                        <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={organization.logo && organization.logo} alt="avatar"/>
                         </span>
                         </span>
                       </td>

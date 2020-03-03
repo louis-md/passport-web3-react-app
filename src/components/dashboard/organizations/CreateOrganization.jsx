@@ -33,7 +33,7 @@ class CreateOrganization extends Component {
     const title = this.state.title;
     const description = this.state.description;
     const owner = this.props.loggedInUser._id;
-    const members = this.state.members;
+    const members = this.props.loggedInUser._id;
     const ethAddresses = this.state.ethAddresses;
     const layers = this.state.layers;
     const contactEmail  = this.state.contactEmail;
@@ -70,9 +70,22 @@ class CreateOrganization extends Component {
         },
         { withCredentials: true }
       )
-      .then(() => {
-        // this.props.getData();
-        this.setState({
+      .then((res) => {
+        const userId = this.props.loggedInUser._id;
+        var userOrganizations = this.props.loggedInUser.organizations;
+        const newOrganization = {organizationId: res.data._id, hasAccessToMyContacts: false, hasAccessToMyFiles: false};
+        console.log(`Id de la nouvelle org: ${res.data._id}`)
+        if (userOrganizations.length) {
+          console.log(`une org existe déjà: ${JSON.stringify(userOrganizations)}`)
+          userOrganizations.push(newOrganization);
+        } else userOrganizations = newOrganization;
+
+        axios.put(
+          `http://localhost:5000/api/users/${userId}`,
+          { organizations: userOrganizations},
+          { withCredentials: true }
+        ).then(()=> {
+          this.setState({
             title: "",
             description: "",
             owner: "",
@@ -91,6 +104,8 @@ class CreateOrganization extends Component {
             privateContacts: []
         });
         this.props.history.push("/organizations");
+        })
+        console.log(`Joining organization, new permitted organizations: ${JSON.stringify(userOrganizations)}`)        
       })
       .catch(error => console.log(error));
   };

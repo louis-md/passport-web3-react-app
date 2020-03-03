@@ -3,23 +3,38 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 class FileList extends Component {
-  constructor(){
-      super();
+  constructor(props){
+      super(props);
       this.state = { 
-        listOfFiles: [],
+        listOfFiles: null,
      };
   }
 
-//   openMediaLibrary()
-
-  getAllFiles = () => {
-    axios.get(`http://localhost:5000/api/files`, {withCredentials:true})
-    .then(responseFromApi => {
-      this.setState({
-        listOfFiles: responseFromApi.data
-      })
+  getFiles = () => {
+    const filesId = this.props.files;
+    const graph = this.props.graph;
+    const listOfFiles = graph[2].filter(file => {
+      return filesId.includes(file._id)
     })
+
+    this.setState({listOfFiles: listOfFiles});
   }
+  //   openMediaLibrary()
+
+  // getAllFiles = () => {
+  //   const files = this.props.targetId;
+  //   const title = this.props.title;
+  //   this.setState({
+  //       listOfFiles: responseFromApi.data
+    //     })
+
+  //   axios.get(`http://localhost:5000/api/files`, {withCredentials:true})
+  //   .then(responseFromApi => {
+  //     this.setState({
+  //       listOfFiles: responseFromApi.data
+  //     })
+  //   })
+  // }
 
 //     media library options: 
 //   const mloptions = {
@@ -38,36 +53,36 @@ class FileList extends Component {
 
 
 
-  componentDidMount() {
-    this.getAllFiles();
-    // const script = document.createElement("script");
+  // componentDidMount() {
 
-    // script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
-    // script.async = true;
-    // script.type= "text/javascript";
+  //   // const script = document.createElement("script");
 
-    // // var myWidget = cloudinary.createUploadWidget({
-    // //   cloudName: 'passport-web3', 
-    // //   uploadPreset: 'my_preset'}, (error, result) => { 
-    // //     if (!error && result && result.event === "success") { 
-    // //       console.log('Done! Here is the image info: ', result.info); 
-    // //     }
-    // //   }
-    // // )
+  //   // script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
+  //   // script.async = true;
+  //   // script.type= "text/javascript";
 
-    // // document.getElementById("upload_widget").addEventListener("click", function(){
-    // //     myWidget.open();
-    // //   }, false);
+  //   // // var myWidget = cloudinary.createUploadWidget({
+  //   // //   cloudName: 'passport-web3', 
+  //   // //   uploadPreset: 'my_preset'}, (error, result) => { 
+  //   // //     if (!error && result && result.event === "success") { 
+  //   // //       console.log('Done! Here is the image info: ', result.info); 
+  //   // //     }
+  //   // //   }
+  //   // // )
 
-    // document.body.appendChild(script);
-  }
+  //   // // document.getElementById("upload_widget").addEventListener("click", function(){
+  //   // //     myWidget.open();
+  //   // //   }, false);
+
+  //   // document.body.appendChild(script);
+  // }
 
   render(){
     return(
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Your files<br/><br/></h3>
+            <h3 className="manage-products-title">{this.props.title && this.props.title}<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">
@@ -77,14 +92,15 @@ class FileList extends Component {
               </thead> */}
               <tbody>
                 {/* {{#each files}} */}
-                { this.state.listOfFiles.map(files => {
+                {this.props.graph && !this.state.listOfFiles && this.getFiles()}
+                { this.state.listOfFiles && this.state.listOfFiles.map(file => {
                   return (
                     <tr>
-                      <td key={files._id}>
-                        {/* <Link to={`/contacts/${contacts._id}`}> */}
+                      <td key={file}>
+                        {/* <Link to={`/contacts/${contacts}`}> */}
                         
-                          <span style={{width: '50%', float:"left"}}><h3 key={files._id}>{files.name}</h3></span>
-                          <a href={files.fileUrl}><span style={{width: '50%', float:"right"}} key={files._id}>{files._id}</span></a>
+                          <span style={{width: '50%', float:"left"}}><h3 key={file}>{file.name}</h3></span>
+                          <a href={file.fileUrl}><span style={{width: '50%', float:"right"}} key={file}>{file._id}</span></a>
                         {/* </Link> */}
                       </td>
                     </tr>

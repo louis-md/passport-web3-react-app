@@ -27,9 +27,23 @@ class App extends Component {
     super(props);
     this.state = {
       userProfile: null,
-      loggedInUser: null
+      loggedInUser: null,
+      graph: null
     };
     this.service = new AuthService();
+  }
+
+  getGraph = () => {
+      axios.get(`http://localhost:5000/api/graph`, {withCredentials:true})
+      .then(responseFromApi => {
+          this.setState({
+          graph: responseFromApi.data
+          })
+      })
+  }
+
+  componentDidMount() {
+  this.getGraph();
   }
 
   fetchUser() {
@@ -82,77 +96,117 @@ class App extends Component {
               user={this.state.loggedInUser}
               path="/contacts/:id"
               component={ContactDetails}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/"
               component={Dashboard}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/organizations/new"
               component={CreateOrganization}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
              <ProtectedRoute
               user={this.state.loggedInUser}
               path="/users/:id"
               component={UserDetails}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/join/:id"
               component={JoinOrganization}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/organizations/:id"
               component={OrganizationDetails}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/organizations/"
               component={OrganizationDashboard}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/files/new"
               component={AddFile}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               exact
               user={this.state.loggedInUser}
               path="/files/"
               component={FileDashboard}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/contacts"
               component={ContactDashboard}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/new"
               component={AddContact}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/edit/:id"
               component={EditContact}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             />
             {/* <ProtectedRoute
               user={this.state.loggedInUser}
               path="/remove/:id"
               component={EditContact}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
             /> */}
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/profile/:id"
               component={ContactDetails}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
             />
           </Switch>
         </div>

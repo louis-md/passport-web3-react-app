@@ -44,7 +44,6 @@ class Browse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      graph: [],
       matchedUsers: [],
       matchedContacts: [],
       matchedFiles: [],
@@ -53,33 +52,34 @@ class Browse extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange(value) {
+  onChange = (value) => {
+    const graph = this.props.graph;
     const getMatchedUsers = (searchText) => {
-        return this.state.graph[0].filter(item => 
+        return graph[0].filter(item => 
             item.email.toLowerCase().includes(searchText.toLowerCase()));
     };
 
     const getMatchedContacts = (searchText) => {
-        return this.state.graph[1].filter(item => 
+        return graph[1].filter(item => 
             item.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
             item.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
             item.secondaryEmails.join().toLowerCase().includes(searchText.toLowerCase()) ||
             item.phoneNumbers.join().toLowerCase().includes(searchText.toLowerCase()) ||
             JSON.stringify(item.postalAddresses).toLowerCase().includes(searchText.toLowerCase()) ||
-            item.ethAddresses.join().toLowerCase().includes(searchText.toLowerCase()) ||
-            JSON.stringify(item.socialAccounts).toLowerCase().includes(searchText.toLowerCase())
+            item.ethAddresses.join().toLowerCase().includes(searchText.toLowerCase())
+            // || JSON.stringify(item.socialAccounts).toLowerCase().includes(searchText.toLowerCase())
             );
     };
 
     const getMatchedFiles = (searchText) => {
-        return this.state.graph[2].filter(item => 
+        return graph[2].filter(item => 
             item.name.toLowerCase().includes(searchText.toLowerCase()) ||
             item.fileUrl.toLowerCase().includes(searchText.toLowerCase())
             );
     };
 
     const getMatchedOrganizations = (searchText) => {
-        return this.state.graph[3].filter(item => 
+        return graph[3].filter(item => 
             item.title.toLowerCase().includes(searchText.toLowerCase()) ||
             item.phoneNumbers.join().toLowerCase().includes(searchText.toLowerCase()) ||
             JSON.stringify(item.postalAddresses).toLowerCase().includes(searchText.toLowerCase()) ||
@@ -106,26 +106,13 @@ class Browse extends Component {
     }
   }
 
-    getGraph = () => {
-        axios.get(`http://localhost:5000/api/graph`, {withCredentials:true})
-        .then(responseFromApi => {
-            this.setState({
-            graph: responseFromApi.data
-            })
-        })
-    }
-
-    componentDidMount() {
-    this.getGraph();
-    }
-
   render() {
     return (
     <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="react-search-field-demo container">
-                <div>
+                {this.props.graph && <div>
                     <SearchField
                     placeholder="Browse eth addresses, users, contacts, files, organizations... "
                     onChange={this.onChange}
@@ -138,7 +125,7 @@ class Browse extends Component {
                     organizations={this.state.matchedOrganizations}
                     />
                     </div>
-                </div>
+                </div>}
             </div>
           </div>
         </div> 

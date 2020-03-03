@@ -56,7 +56,7 @@ class AddContact extends Component {
             avatar: "",
         });
 
-        if (user.contacts) {
+        if (user.contacts.length) {
             user.contacts.push(response.data._id)
         } else user.contacts = response.data._id;
 

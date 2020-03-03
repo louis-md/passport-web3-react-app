@@ -3,24 +3,22 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 class ContactList extends Component {
-  constructor(){
-      super();
-      this.state = { 
-        listOfContacts: [],
-     };
+  constructor(props){
+      super(props);
+      this.state = {
+        listOfContacts: null
+      }
   }
 
-  getAllContacts = () => {
-    axios.get(`http://localhost:5000/api/contacts`, {withCredentials:true})
-    .then(responseFromApi => {
-      this.setState({
-        listOfContacts: responseFromApi.data
-      })
+  getContacts = () => {
+    const contactList = this.props.contacts;
+    const graph = this.props.graph;
+    const contactObjects = graph[1].filter(contact => {
+      return contactList.includes(contact._id)
     })
-  }
+    console.log(this.props.contacts)
 
-  componentDidMount() {
-    this.getAllContacts();
+    this.setState({listOfContacts: contactObjects});
   }
 
   render(){
@@ -28,7 +26,7 @@ class ContactList extends Component {
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Your contacts <br/><br/></h3>
+            <h3 className="manage-products-title">{this.props.title && this.props.title}<br/><br/></h3>
             <table className="product-manage-table">
               <thead>
                 {/* <tr className="table-row">
@@ -39,18 +37,20 @@ class ContactList extends Component {
               </thead>
               <tbody>
                 {/* {{#each contacts}} */}
-                { this.state.listOfContacts.map(contacts => {
+                {this.props.graph && !this.state.listOfContacts && this.getContacts()}
+                {this.state.listOfContacts && this.state.listOfContacts.map(contact => {
+
                   return (
                     <tr>
-                      <td key={contacts._id}>
+                      <td key={contact._id}>
                       <div style={{margin: "5px 0 0 0"}}>
-                        <Link to={`/contacts/${contacts._id}`}>
-                          <h3  key={contacts._id}>{contacts.firstName} {contacts.lastName}</h3>
+                        <Link to={`/contacts/${contact._id}`}>
+                          <h3  key={contact._id}>{contact.firstName} {contact.lastName}</h3>
                         </Link>
                         </div>
                       </td>
                       <td>
-                        <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={contacts.avatar && contacts.avatar} alt="avatar"/>
+                        <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={contact.avatar && contact.avatar} alt="avatar"/>
                       </td>
                     </tr>
                   )})
