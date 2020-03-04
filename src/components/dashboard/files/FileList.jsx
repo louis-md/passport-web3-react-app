@@ -93,7 +93,7 @@ class FileList extends Component {
               <tbody>
                 {/* {{#each files}} */}
                 {this.props.graph && !this.state.listOfFiles && this.getFiles()}
-                { this.state.listOfFiles && this.state.listOfFiles.map(file => {
+                {this.state.listOfFiles && this.state.listOfFiles.map(file => {
                   return (
                     <tr>
                       <td key={file}>

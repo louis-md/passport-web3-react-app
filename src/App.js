@@ -20,6 +20,7 @@ import CreateOrganization from "./components/dashboard/organizations/CreateOrgan
 import OrganizationDetails from "./components/dashboard/organizations/OrganizationDetails";
 import JoinOrganization from './components/dashboard/organizations/JoinOrganization'
 import UserDetails from "./components/dashboard/UserDetails";
+import EditOrganization from "./components/dashboard/organizations/EditOrganization"
 
 
 class App extends Component {
@@ -113,6 +114,15 @@ class App extends Component {
               user={this.state.loggedInUser}
               path="/organizations/new"
               component={CreateOrganization}
+              graph={this.state.graph}
+              getGraph={this.getGraph}
+
+            />
+            <ProtectedRoute
+              exact
+              user={this.state.loggedInUser}
+              path="/organizations/edit/:id"
+              component={EditOrganization}
               graph={this.state.graph}
               getGraph={this.getGraph}
 

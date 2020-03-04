@@ -13,14 +13,14 @@ export default class Dashboard extends Component {
             <div>
                 <span style={{width: '50%', float:"left"}}>
                     <div className="modal-dialog"><h1>Contacts</h1></div>
-                    <Browse />    
-                    <ContactsFromUsers />
-                    <ContactsFromOrganizations />
+                    <Browse graph={this.props.graph}/>    
+                    <ContactList graph={this.props.graph} contacts={this.props.loggedInUser.contactsFromFriends} title="Contacts your friends shared with you"/>
+                    <ContactList graph={this.props.graph} contacts={this.props.loggedInUser.contactsFromOrganizations} title="Contacts your organizations shared with you"/>
                 </span>
                 <span style={{width: '50%', float:"right"}}>
                     <FriendRequests />
-                    <ContactList />
                     <Friends />   
+                    <ContactList graph={this.props.graph} contacts={this.props.loggedInUser.contacts} title="Your contacts"/>
                 </span>
             </div>
         )

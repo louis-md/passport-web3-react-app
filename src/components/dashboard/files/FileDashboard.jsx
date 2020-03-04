@@ -10,13 +10,13 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <span style={{width: '50%', float:"right"}}>
-                    <FileList />  
+                    <FileList graph={this.props.graph} files={this.props.loggedInUser.filesFromFriends} title="Your files"/>  
                 </span>
                 <span style={{width: '50%', float:"left"}}>
                     <div className="modal-dialog"><h1>Files</h1></div>
-                    <Browse />
-                    <FilesFromUsers />
-                    <FilesFromOrganizations />  
+                    <Browse graph={this.props.graph}/>
+                    <FileList graph={this.props.graph} files={this.props.loggedInUser.filesFromFriends} title="Files your friends shared with you"/>
+                    <FileList graph={this.props.graph} files={this.props.loggedInUser.filesFromOrganizations} title="Files your organizations shared with you"/>
                 </span>
             </div>
         )

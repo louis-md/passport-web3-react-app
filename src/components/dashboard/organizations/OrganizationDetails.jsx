@@ -47,15 +47,12 @@ class OrganizationDetails extends Component {
   getUserPermissions = () => {
     const { params } = this.props.match;
     const userOrganizations = this.props.loggedInUser.organizations;
-    const updatedPermissions = userOrganizations.reduce((organizations) => {
+    const updatedPermissions = userOrganizations.reduce(organizations => {
+      console.log(organizations)
       if (organizations.organizationId === params.id) {
-        return {
-        hasAccessToMyContacts: organizations.hasAccessToMyContacts,
-        hasAccessToMyFiles: organizations.hasAccessToMyFiles
-      }
+        return organizations
       }
     })
-
     this.setState({
       hasAccessToMyContacts: updatedPermissions.hasAccessToMyContacts, 
       hasAccessToMyFiles: updatedPermissions.hasAccessToMyFiles})
@@ -283,7 +280,7 @@ class OrganizationDetails extends Component {
     return(
       <div >
         {this.props.graph && !this.state.organization && this.getSingleOrganization()}
-        {((this.state.hasAccessToMyFiles === null) || (this.state.hasAccessToMyFiles === null))&& this.getUserPermissions()}
+        {this.props.loggedInUser && ((this.state.hasAccessToMyFiles === null) || (this.state.hasAccessToMyFiles === null))&& this.getUserPermissions()}
         {this.state.organization && <div>
         <span style={{width: '50%', float:"left"}}>
         <div className="modal-dialog"><img className="avatar" style={{ verticalAlign: 'middle', width: '60px', float:"left", margin:"0 8px 0 0"}} src={this.state.organization.logo && this.state.organization.logo} alt="avatar"/><span><h1>{this.state.organization.title}</h1></span></div>
@@ -356,7 +353,7 @@ class OrganizationDetails extends Component {
                     </div>}
                     { this.props.loggedInUser._id == this.state.organization.owner && <div>
                     <div><h4>Admin priviledges</h4></div><br/>
-                    <Link to={`/edit/${this.state.organization._id}`}>
+                    <Link to={`/organizations/edit/${this.state.organization._id}`}>
                     <button className="btn btn-secondary btn-sm">Edit organization profile</button><span> </span>
                     </Link><br/><br/>
                     <button className="btn btn-secondary btn-sm">Manage members list</button><span> </span>

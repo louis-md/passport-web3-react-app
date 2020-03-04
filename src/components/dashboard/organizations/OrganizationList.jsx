@@ -3,32 +3,43 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 class OrganizationList extends Component {
-  constructor(){
-      super();
+  constructor(props){
+      super(props);
       this.state = { 
-        listOfOrganizations: [],
+        listOfOrganizations: null,
      };
   }
 
-  getAllOrganizations = () => {
-    axios.get(`http://localhost:5000/api/organizations`, {withCredentials:true})
-    .then(responseFromApi => {
-      this.setState({
-        listOfOrganizations: responseFromApi.data
-      })
+  getOrganizations = () => {
+    const organizationsId = this.props.organizations;
+    console.log(organizationsId)
+    const graph = this.props.graph;
+    const listOfOrganizations = graph[3].filter(organization => {
+      return organizationsId.includes(organization._id)
     })
+    console.log(listOfOrganizations)
+    this.setState({listOfOrganizations: listOfOrganizations});
   }
 
-  componentDidMount() {
-    this.getAllOrganizations();
-  }
+  // getAllOrganizations = () => {
+  //   axios.get(`http://localhost:5000/api/organizations`, {withCredentials:true})
+  //   .then(responseFromApi => {
+  //     this.setState({
+  //       listOfOrganizations: responseFromApi.data
+  //     })
+  //   })
+  // }
+
+  // componentDidMount() {
+  //   this.getAllOrganizations();
+  // }
 
   render(){
     return(
       <div className="big-container manage-products-wrapper">
         <div className="modal-dialog">
           <div className="modal-content">
-            <h3 className="manage-products-title">Your organizations<br/><br/></h3>
+            <h3 className="manage-products-title">{this.props.title}<br/><br/></h3>
             <table className="product-manage-table">
               {/* <thead>
                 <tr className="table-row">
@@ -38,7 +49,8 @@ class OrganizationList extends Component {
               </thead> */}
               <tbody>
                 {/* {{#each files}} */}
-                { this.state.listOfOrganizations.map(organization => {
+                {this.props.graph && !this.state.listOfOrganizations && this.getOrganizations()}
+                {this.state.listOfOrganizations && this.state.listOfOrganizations.map(organization => {
                   return (
                     <tr>
                       <td key={organization._id}>
