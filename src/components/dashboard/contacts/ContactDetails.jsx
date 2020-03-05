@@ -16,8 +16,14 @@ class ContactDetails extends Component {
   }
 
   getSingleContact = () => {
-    const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/contacts/${params.id}`, {withCredentials:true})
+    var contact;
+    if (this.props.contact) {
+      contact = this.props.contact
+     } else {
+      const { params } = this.props.match;
+      contact = params.id;
+     }
+    axios.get(`http://localhost:5000/api/contacts/${contact}`, {withCredentials:true})
     .then( responseFromApi =>{
       const theContact = responseFromApi.data;
       this.setState(theContact);
@@ -37,8 +43,8 @@ class ContactDetails extends Component {
 
 // DELETE PROJECT:
   deleteContact = () => {
-    const { params } = this.props.match;
-    axios.delete(`http://localhost:5000/api/contacts/${params.id}`, {withCredentials:true})
+    const contact = this.props.contact;
+    axios.delete(`http://localhost:5000/api/contacts/${contact}`, {withCredentials:true})
     .then( () =>{
         this.props.history.push('/contacts'); // !!!         
     })
@@ -112,10 +118,11 @@ class ContactDetails extends Component {
                     } 
                 <br/>
                 <div>
-                    <Link to={`/edit/${this.state._id}`}>
+                    {/* todo : replacer this.props.loggedInUser.contacts.includes(this.props.contact) par graph[1].filter(contact => contact._id === this.props.contact)*/}
+                    {this.state._id && <div> <Link to={`/edit/${this.state._id}`}>
                     <button className="btn btn-secondary btn-sm">Edit contact</button>
-                    </Link>
-                    <button className="btn btn-secondary btn-sm" onClick={this.deleteContact}>Delete contact</button>
+                    </Link><span> </span>
+                    <button className="btn btn-secondary btn-sm" onClick={this.deleteContact}>Delete contact</button></div>}
                 </div>
                 </div>
                 </div>

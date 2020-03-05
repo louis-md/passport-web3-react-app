@@ -104,7 +104,7 @@ class Navbar extends Component {
                 </div>
               </div>
             </div>
-            <Link to={`/users/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>
+            <Link to={`/users/${this.state.loggedInUser._id}`} style={{ textDecoration: "none" }}>
             <img className="avatar" style={{width: '50px', margin: "3px 0 0 25px"}} src={this.props.userProfile && this.props.userProfile.avatar} alt="avatar"/>
             </Link>
           </div>

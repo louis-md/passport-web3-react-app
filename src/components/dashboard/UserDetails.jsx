@@ -15,28 +15,74 @@ import ContactsFromOrganizations from './contacts/ContactsFromOrganizations'
 import Partners from './organizations/Partners'
 import Browse from "./Browse"
 import OrganizationList from './organizations/OrganizationList';
+import ContactDetails from './contacts/ContactDetails'
+// import web3 from "web3"
 
 
 class UserDetails extends Component {
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+      userProfile: null,
+      metamaskConnected: null,
+      activeMetamaskAddress: null,
+      validatedAddress: null
+    };
   }
 
   componentDidMount(){
-    this.getSingleOrganization();
+    this.getSingleContact();
   }
 
-  getSingleOrganization = () => {
-    const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
+  getSingleContact = () => {
+    console.log("getting contact")
+    const profile = this.props.loggedInUser.profile;
+    console.log(profile)
+
+    axios.get(`http://localhost:5000/api/contacts/${profile}`, {withCredentials:true})
     .then( responseFromApi =>{
-      const theOrganization = responseFromApi.data;
-      this.setState(theOrganization);
+      const theContact = responseFromApi.data;
+      console.log(theContact)
+      this.setState({userProfile: theContact});
     })
     .catch((err)=>{
         console.log(err)
     })
+  }
+
+  connect = () => {
+    console.log("Function connect() called");
+    window.ethereum.enable().then(res => {
+      this.setState({
+        metamaskConnected: true,
+        activeMetamaskAddress: res[0]
+      })
+    }).catch();
+  }
+
+  confirmEthAddress = (metamaskResponse) => {
+    console.log(this.state.userProfile.ethAddresses)
+    console.log(this.state.activeMetamaskAddress)
+    const ethAddresses = this.state.userProfile.ethAddresses
+
+    //Super-dangerous: absolutely need to change that before production!!!
+    const ethAddressesToLowerCase = ethAddresses.map(ethAddress => {
+      return ethAddress.toLowerCase()
+    })
+    //
+
+
+    if (metamaskResponse === null && ethAddressesToLowerCase.includes(this.state.activeMetamaskAddress)) {
+      this.setState({
+        validatedAddress: true
+      })
+    }
+  }
+
+  signMessage = () => {
+    console.log(window.web3)
+    window.web3.personal.sign(window.web3.fromUtf8("Please sign this message to confirm Eth address. We do not get access to your private keys. Passport web3 team"), window.web3.eth.coinbase, this.confirmEthAddress)
+
   }
 
   renderEditForm = () => {
@@ -88,49 +134,12 @@ class UserDetails extends Component {
         <Friends />
         </span>
         <span style={{width: '50%', float:"right"}}> 
+        <ContactDetails contact={this.props.loggedInUser.profile} />
         <div className="modal-dialog">
             <div className="modal-content">
-                <div className="modal-header p-4">
-                    <span><img className='avatar' style={{width: '30px'}} src={this.state.logo} alt="profile picture" /></span>
-                    <h5 className="modal-title text-primary font-weight-bold">{this.state.title}</h5>
-                </div>
-                <div className="form-group">
-                  <h2>Phone numbers</h2>
-                  <ul>{this.state.phoneNumbers && this.state.phoneNumbers.map((phoneNumber, index) => {return (<li key={index}>{phoneNumber}</li>)})}</ul>
-                </div>
-                <div>
-                  <h2>Emails</h2>
-                  <ul>{this.state.contactEmail && this.state.contactEmail.map((contactEmail, index) => {return (<li key={index}>{contactEmail}</li>)})}</ul>
-                </div>
-                <div>
-                  <h2>Ethereum address</h2>
-                  <ul>{this.state.ethAddresses && this.state.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
-                </div>
-                 <h2>Postal address</h2>
-                  {this.state.postalAddresses && this.state.postalAddresses.map((postalAddress, index) => {return (
-                    <ul>
-                      {postalAddress.streetNumber && <li key={index}>{postalAddress.streetNumber}</li>}
-                      {postalAddress.special && <li key={index}>{postalAddress.special}</li>}
-                      {postalAddress.streetName && <li key={index}>{postalAddress.streetName}</li>}
-                      {postalAddress.city && <li key={index}>{postalAddress.city}</li>}
-                      {postalAddress.postCode && <li key={index}>{postalAddress.postCode}</li>}
-                      {postalAddress.country && <li key={index}>{postalAddress.country}</li>}
-                      {postalAddress.principalResidency && <li key={index}>{postalAddress.principalResidency}</li>}
-                    </ul>
-                    )})}
-                <div>
-                  <h2>Social Links</h2>
-                  {this.state.socialLinks && 
-                    <ul>
-                    {this.state.socialLinks.googleId && <li>{this.state.socialLinks.googleId}</li>}
-                    {this.state.socialLinks.facebookId && <li>{this.state.socialLinks.facebookId}</li>}
-                    {this.state.socialLinks.twitterId && <li>{this.state.socialLinks.twitterId}</li>}
-                    {this.state.socialLinks.githubId && <li>{this.state.socialLinks.githubId}</li>}
-                    {this.state.socialLinks.asanaId && <li>{this.state.socialLinks.asanaId}</li>}
-                    </ul>
-                    } 
                 <div>
                     <br/>
+                    {this.state.userProfile && (this.props.loggedInUser._id !== this.state.userProfile.owner) && <div> 
                     <Link to={`/join/${this.state._id}`}>
                     <button className="btn btn-secondary btn-sm">Become friends</button>
                     </Link>
@@ -138,15 +147,23 @@ class UserDetails extends Component {
                     <Link to={`/join/${this.state._id}`}>
                     <button className="btn btn-secondary btn-sm">Invite to organisation</button>
                     </Link>
-                    <br/><br/><br/>
-                    { this.props.loggedInUser._id == this.state.owner && <div>
-                    <div><h4>Admin priviledges</h4></div><br/>
-                    <Link to={`/edit/${this.state._id}`}>
-                    <button className="btn btn-secondary btn-sm">Edit organization profile</button><span> </span>
-                    </Link>
-                    <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.deleteOrganization}>Delete organization</button>
-                </div>}
-                </div>
+                    </div>}
+                    {this.state.userProfile && (this.props.loggedInUser._id === this.state.userProfile.owner) && <div>
+                    <h3>Eth authenticator</h3><br/>
+                    <p>Connect to metamask and sign a message to validate your address. We do not get access to your funds nor private keys.</p>
+                    {this.state.activeMetamaskAddress && 
+                      <div><br/>
+                        <span><img style={{width:"25px", float:"left"}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png"/></span>
+                        <span><p style={{color: "limegreen", float:"left"}}> Connected to Metamask</p></span><br/><br/>
+                        {this.state.validatedAddress && <div>
+                          <span><img style={{width:"25px", float:"left"}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png"/></span>
+                          <span><p style={{color: "limegreen", float:"left"}}> Successfully validated ownership of <br/>{this.state.activeMetamaskAddress}!</p></span><br/><br/><br/>
+                        </div>}
+                      </div>}
+                    <br/>
+                    <button className="btn btn-secondary btn-sm" onClick={this.connect}>Connect metamask</button><span> </span>
+                    <button className="btn btn-secondary btn-sm" id="ethjsPersonalSignButton" onClick={this.signMessage} >Confirm ethereum address</button><span> </span>
+                    </div>}
                 </div>
                 </div>
                 </div>
