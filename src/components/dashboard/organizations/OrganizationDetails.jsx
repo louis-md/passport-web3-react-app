@@ -47,12 +47,12 @@ class OrganizationDetails extends Component {
   getUserPermissions = () => {
     const { params } = this.props.match;
     const userOrganizations = this.props.loggedInUser.organizations;
-    const updatedPermissions = userOrganizations.reduce(organizations => {
-      console.log(organizations)
+    const updatedPermissions = userOrganizations.map(organizations => {
       if (organizations.organizationId === params.id) {
         return organizations
       }
     })
+
     this.setState({
       hasAccessToMyContacts: updatedPermissions.hasAccessToMyContacts, 
       hasAccessToMyFiles: updatedPermissions.hasAccessToMyFiles})
@@ -279,7 +279,7 @@ class OrganizationDetails extends Component {
   render(){
     return(
       <div >
-        {this.props.graph && !this.state.organization && this.getSingleOrganization()}
+        {this.props.graph && !this.state.organization && this.props.loggedInUser && this.getSingleOrganization()}
         {this.props.loggedInUser && ((this.state.hasAccessToMyFiles === null) || (this.state.hasAccessToMyFiles === null))&& this.getUserPermissions()}
         {this.state.organization && <div>
         <span style={{width: '50%', float:"left"}}>
@@ -288,9 +288,10 @@ class OrganizationDetails extends Component {
         <Browse graph={this.props.graph}/>
         <FileList graph={this.props.graph} files={this.state.organization.files} title={`${this.state.organization.title} Files`}/>
         <FileList graph={this.props.graph} files={this.state.organization.filesFromMembers} title={`Files shared by ${this.state.organization.title} members`}/>
-        <FileList graph={this.props.graph} files={this.state.organization.filesFromPartners} title={`Files shared by ${this.state.organization.title} partners`}/>
+        {/* <FileList graph={this.props.graph} files={this.state.organization.filesFromPartners} title={`Files shared by ${this.state.organization.title} partners`}/> */}
         <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromMembers} title={`Contacts shared by ${this.state.organization.title} members`}/>
-        <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromPartners} title={`Contacts shared by ${this.state.organization.title} partners`}/>
+        {/* <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromPartners} title={`Contacts shared by ${this.state.organization.title} partners`}/> */}
+        <ContactList graph={this.props.graph} contacts={this.state.organization.contacts} title={`${this.state.organization.title} contacts`}/>
         </span>
         <span style={{width: '50%', float:"right"}}> 
         <MembershipRequests membershipRequests={this.state.organization.membershipRequests} members={this.state.organization.members} organization={this.state.organization._id} updateOrganization={() => this.getSingleOrganization}/>
@@ -354,9 +355,9 @@ class OrganizationDetails extends Component {
                     { this.props.loggedInUser._id == this.state.organization.owner && <div>
                     <div><h4>Admin priviledges</h4></div><br/>
                     <Link to={`/organizations/edit/${this.state.organization._id}`}>
-                    <button className="btn btn-secondary btn-sm">Edit organization profile</button><span> </span>
-                    </Link><br/><br/>
-                    <button className="btn btn-secondary btn-sm">Manage members list</button><span> </span>
+                    <button className="btn btn-secondary btn-sm">Edit organization</button><span> </span>
+                    </Link>
+                    <button className="btn btn-secondary btn-sm">Manage members list</button><span> </span><br/><br/>
                     <button className="btn btn-sm" style={{color: "white", background: "firebrick"}} onClick={this.deleteOrganization}>Delete organization</button>
                 </div>}
                 </div>
@@ -365,7 +366,6 @@ class OrganizationDetails extends Component {
                 </div>
                 <Members members={this.state.organization.members}/>
                 <Owner owner={this.state.organization.owner}/>
-                <ContactList graph={this.props.graph} contacts={this.state.organization.contacts} title={`${this.state.organization.title} contacts`}/>
                 <PartnershipRequests />
                 <Partners />
             </span>

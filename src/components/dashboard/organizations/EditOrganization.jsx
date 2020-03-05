@@ -8,70 +8,33 @@ class EditOrganization extends Component {
   constructor(props){
     super(props);
     this.state = {
-        firstName:'',
-        lastName: '',
-        bio: '',
-        secondaryEmails: [],
+        title:'',
+        contactEmail: [],
         phoneNumbers: [],
         ethAddresses: [],
         postalAddresses: [],
-        socialAccounts: {},
-        avatar: "",
+        logo: "",
     };
   }
   
   componentDidMount(){
-    this.getSingleContact();
+    this.getSingleOrganization();
   }
 
-  getSingleContact = () => {
+  getSingleOrganization = () => {
     const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/contacts/${params.id}`, {withCredentials:true})
+    axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
     .then( responseFromApi => {
-      const theContact = responseFromApi.data;
-      console.log(theContact)
-      if (theContact.socialAccounts) {
-        const googleId = theContact.socialAccounts.googleId;
-        const facebookId = theContact.socialAccounts.facebookId;
-        const twitterId = theContact.socialAccounts.twitterId;
-        const githubId = theContact.socialAccounts.githubId;
-        const asanaId = theContact.socialAccounts.asanaId;
-          this.setState({
-            avatar: theContact.avatar,
-            firstName: theContact.firstName,
-            lastName: theContact.lastName,
-            bio: theContact.bio,
-            secondaryEmails: theContact.secondaryEmails,
-            phoneNumbers: theContact.phoneNumbers,
-            ethAddresses: theContact.ethAddresses,
-            postalAddresses: theContact.postalAddresses,
-            socialAccounts : {
-                googleId: googleId,
-                facebookId: facebookId,
-                twitterId: twitterId,
-                githubId: githubId,
-                asanaId: asanaId,
-              }
-          })
-      } else {
+      const theOrganization = responseFromApi.data;
+      console.log(theOrganization)
         this.setState({
-            avatar: theContact.avatar,
-            firstName: theContact.firstName,
-            lastName: theContact.lastName,
-            bio: theContact.bio,
-            secondaryEmails: theContact.secondaryEmails,
-            phoneNumbers: theContact.phoneNumbers,
-            ethAddresses: theContact.ethAddresses,
-            postalAddresses: theContact.postalAddresses,
-            socialAccounts : {
-                googleId: "",
-                facebookId: "",
-                twitterId: "",
-                githubId: "",
-                asanaId: "",
-              }
+            logo: theOrganization.logo,
+            title: theOrganization.title,
+            contactEmail: theOrganization.contactEmail,
+            phoneNumbers: theOrganization.phoneNumbers,
+            ethAddresses: theOrganization.ethAddresses,
+            postalAddresses: theOrganization.postalAddresses,
         })
-      }
     })
     .catch((err)=>{
         console.log(err)
@@ -81,27 +44,18 @@ class EditOrganization extends Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
     const { params } = this.props.match;
-    const firstName = this.state.firstName;
-    const lastName = this.state.lastName;
-    const avatar = this.state.avatar;
-    const bio = this.state.bio;
-    const secondaryEmails = this.state.secondaryEmails;
+    const title = this.state.title;
+    const logo = this.state.logo;
+    const contactEmail = this.state.contactEmail;
     const phoneNumbers = this.state.phoneNumbers;
     const ethAddresses = this.state.ethAddresses;
     const postalAddresses = this.state.postalAddresses;
-    const socialAccounts = {
-        googleId: this.state.socialAccounts.googleId,
-        twitterId: this.state.socialAccounts.twitterId,
-        facebookId: this.state.socialAccounts.facebookId,
-        githubId: this.state.socialAccounts.githubId,
-        asanaId: this.state.socialAccounts.asanaId 
-    };
 
     axios
-    .put(`http://localhost:5000/api/contacts/${params.id}`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
+    .put(`http://localhost:5000/api/organizations/${params.id}`, {title, contactEmail, phoneNumbers, ethAddresses, postalAddresses, logo}, {withCredentials:true})
     .then( () => {
         // this.props.getData();
-        this.props.history.push('/contacts');    
+        this.props.history.push(`/organizations/${params.id}`);    
     })
     .catch( error => console.log(error) )
   }
@@ -119,13 +73,8 @@ class EditOrganization extends Component {
     this.setState({ postalAddresses: value });
   }
 
-  handleSocialAccountsChange = event => {
-    const {name, value} = event.target;
-    this.setState({ socialAccounts: {[name]: value}})
-  }
-
-  updateAvatar = value => {
-      this.setState({avatar: value});
+  updatelogo = value => {
+      this.setState({logo: value});
   }
 
   render(){
@@ -138,18 +87,13 @@ class EditOrganization extends Component {
                 <form onSubmit={this.handleFormSubmit} className="create-contact-form" encType="multipart/form-data">
                     <div className="modal-body">
                         <div className="form-group">
-                            <label htmlFor="contact-firstName">First name</label>
-                            <input id="contact-firstName" type="text" name="firstName" className="form-control" placeholder="Steve" value={this.state.firstName} onChange={ e => this.handleChange(e)}/>
+                            <label htmlFor="title">Title</label>
+                            <input id="title" type="text" name="title" className="form-control" placeholder="Steve" value={this.state.title} onChange={ e => this.handleChange(e)}/>
                         </div>
         
-                        <div className="form-group">
-                            <label htmlFor="contact-lastName">Last name</label>
-                            <input id="contact-lastName" type="text" name="lastName" className="form-control" placeholder="Wozniak" value={this.state.lastName} onChange={ e => this.handleChange(e)}/>
-                        </div>
-        
-                        <div id="emails">                            
-                            <div id="fieldEmail" className="form-group">
-                                <AddFields field="secondaryEmails" title="Email" buttonText="Add another email" placeholder="steve.wozniak@apple.com" value={this.state.secondaryEmails} updateField={() => this.updateFields()} />
+                        <div id="email">                            
+                            <div id="contactEmail" className="form-group">
+                                <AddFields field="contactEmail" title="Contact email" buttonText="Add another email" placeholder="steve.wozniak@apple.com" value={this.state.contactEmail} updateField={() => this.updateFields()} />
                             </div>
                         </div>
                         <div id="phone-numbers">
@@ -167,35 +111,13 @@ class EditOrganization extends Component {
                         <div>Postal Address</div>
                             <AddPostalAddresses value={this.state.postalAddresses} updatePostalAddress={(e) => this.updatePostalAddresses(e)} />
 
-
-                        <div><br/><br/>Social Accounts</div>
                         <div className="form-group">
-                            <label htmlFor="socialAccounts-googleId">Google ID</label>
-                            <input id="socialAccounts-googleId" type="text" name="googleId" className="form-control" value={this.state.socialAccounts.googleId} onChange={ e => this.handleSocialAccountsChange(e)}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="socialAccounts-twitterId">Twitter ID</label>
-                            <input id="socialAccounts-twitterId" type="text" name="twitterId" className="form-control" value={this.state.socialAccounts.twitterId} onChange={ e => this.handleSocialAccountsChange(e)}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="socialAccounts-facebookId">Facebook ID</label>
-                            <input id="socialAccounts-facebookId" type="text" name="facebookId" className="form-control" value={this.state.socialAccounts.facebookId} onChange={ e => this.handleSocialAccountsChange(e)}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="socialAccounts-githubId">Github ID</label>
-                            <input id="socialAccounts-githubId" type="text" name="githubId" className="form-control" value={this.state.socialAccounts.githubId} onChange={ e => this.handleSocialAccountsChange(e)}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="socialAccounts-asanaId">Asana ID</label>
-                            <input id="socialAccounts-asanaId" type="text" name="asanaId" className="form-control" value={this.state.socialAccounts.asanaId} onChange={ e => this.handleSocialAccountsChange(e)}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="contact-img" className="label-price label" style={{width: '75%', float:"left"}}>Set Avatar <br/><br/></label>                            
+                            <label htmlFor="contact-img" className="label-price label" style={{width: '75%', float:"left"}}>Set logo <br/><br/></label>                            
                             <span>
-                            <AddFile loggedInUser={this.props.loggedInUser} updateAvatar={(e) => {this.updateAvatar(e)}}/>
+                            <AddFile loggedInUser={this.props.loggedInUser} updateAvatar={(e) => {this.updatelogo(e)}}/>
                             </span>
                         </div>
-                        <button type="submit" className="btn btn-secondary btn-sm">Edit contact</button>
+                        <button type="submit" className="btn btn-secondary btn-sm">Edit organization</button>
                     </div>
                 </form>
             </div>

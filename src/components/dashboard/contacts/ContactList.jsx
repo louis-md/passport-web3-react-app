@@ -50,6 +50,7 @@ class ContactList extends Component {
                         </div>
                       </td>
                       <td>
+                        {(contact.validatedEthAddresses.length > 0) && <img style={{ float: "left", verticalAlign: 'middle', width: '40px'}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" alt="avatar"/>}
                         <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={contact.avatar && contact.avatar} alt="avatar"/>
                       </td>
                     </tr>

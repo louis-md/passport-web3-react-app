@@ -46,6 +46,7 @@ class CreateOrganization extends Component {
     const privateFiles = this.state.privateFiles;
     const publicContacts = this.state.publicContacts;
     const privateContacts = this.state.privateContacts;
+    const contacts = [this.props.loggedInUser.profile];
     
     axios
       .post(
@@ -67,6 +68,7 @@ class CreateOrganization extends Component {
             privateFiles,
             publicContacts,
             privateContacts,
+            contacts
         },
         { withCredentials: true }
       )

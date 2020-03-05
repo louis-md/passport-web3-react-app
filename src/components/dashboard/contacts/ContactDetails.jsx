@@ -79,6 +79,7 @@ class ContactDetails extends Component {
             <div className="modal-content">
                 <div className="modal-header p-4">
                     <h3 className="modal-title text-primary font-weight-bold">{this.state.firstName} {this.state.lastName}</h3>
+                    {this.state.validatedEthAddresses && this.state.validatedEthAddresses.length > 0 && <div><span><img className="avatar" style={{width: '50px'}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" alt="validated contact" /></span></div>}
                     <span><img className="avatar" style={{width: '50px'}} src={this.state.avatar} alt="profile picture" /></span>
                 </div>
                 <div className="form-group">
@@ -89,8 +90,16 @@ class ContactDetails extends Component {
                   <br/><h5>Emails</h5><br/>
                   <ul>{this.state.secondaryEmails && this.state.secondaryEmails.map((secondaryEmail, index) => {return (<li key={index}>{secondaryEmail}</li>)})}</ul>
                 </div>
+                {this.state.validatedEthAddresses && <div>
+                  <br/><h5>Validated ethereum addresses</h5><br/>
+                  <ul>{this.state.validatedEthAddresses.map((ethAddress, index) => {return (<li key={index}>
+                    <img style={{ float: "left", verticalAlign: 'middle', width: '16px'}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" alt="avatar"/>
+                      <a href={`https://rinkeby.etherscan.io/address/${ethAddress}`} target="_blank">{ethAddress}</a>
+                    </li>)})}
+                  </ul>
+                </div>}
                 <div>
-                  <br/><h5>Ethereum address</h5><br/>
+                  <br/><h5>Ethereum addresses</h5><br/>
                   <ul>{this.state.ethAddresses && this.state.ethAddresses.map((ethAddress, index) => {return (<li key={index}>{ethAddress}</li>)})}</ul>
                 </div>
                  <br/><h5>Postal address</h5><br/>
@@ -119,10 +128,13 @@ class ContactDetails extends Component {
                 <br/>
                 <div>
                     {/* todo : replacer this.props.loggedInUser.contacts.includes(this.props.contact) par graph[1].filter(contact => contact._id === this.props.contact)*/}
-                    {this.state._id && <div> <Link to={`/edit/${this.state._id}`}>
-                    <button className="btn btn-secondary btn-sm">Edit contact</button>
-                    </Link><span> </span>
-                    <button className="btn btn-secondary btn-sm" onClick={this.deleteContact}>Delete contact</button></div>}
+                    {this.state._id && 
+                      <div>
+                        <Link to={`/edit/${this.state._id}`}>
+                          <button className="btn btn-secondary btn-sm">Edit contact</button>
+                        </Link><span> </span>
+                        {this.props.loggedInUser && this.state._id !== this.props.loggedInUser.profile && <button className="btn btn-secondary btn-sm" onClick={this.deleteContact}>Delete contact</button>}
+                      </div>}
                 </div>
                 </div>
                 </div>

@@ -13,8 +13,10 @@ class MembershipRequests extends Component {
   acceptRequest = (request) => {
     const currentMembershipRequests = this.props.membershipRequests;
     const newMembershipRequests = currentMembershipRequests.filter((req) => {return req !== request});
-    const newMembers = this.props.members;
-    newMembers.push(request.fromId);
+    var newMembers = this.props.members;
+    if (newMembers.length) {
+      newMembers.push(request.fromId);
+    } else newMembers = request.fromId;
     const organization = this.props.organization;
     
     axios

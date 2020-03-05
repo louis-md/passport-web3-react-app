@@ -41,7 +41,7 @@ class JoinOrganization extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     const { params } = this.props.match;
-    const targetOrganization = this.state.targetOrganization;
+    var targetOrganization = this.state.targetOrganization;
     const request = {
       fromId: this.state.fromId,
       message: this.state.message
@@ -50,15 +50,22 @@ class JoinOrganization extends Component {
     currentMembershipRequests.push(request);
     const userId = this.props.loggedInUser._id;
     var userOrganizations = this.props.loggedInUser.organizations;
+    var userProfile = this.props.loggedInUser.profile
     const newOrganization = {organizationId: targetOrganization._id, hasAccessToMyContacts: false, hasAccessToMyFiles: false};
     if (userOrganizations) {
       userOrganizations.push(newOrganization);
     } else userOrganizations = newOrganization;
     console.log(`Joining organization, new permitted organizations: ${JSON.stringify(userOrganizations)}`)
     
+    if (targetOrganization.contacts) {
+      targetOrganization.contacts.push(userProfile);
+    } else targetOrganization.contacts = userProfile;
+
+    console.log(`updated contacts :${targetOrganization.contacts}`)
+
     const requestCall = axios.put(
       `http://localhost:5000/api/organizations/${params.id}`,
-      { membershipRequests: currentMembershipRequests},
+      { membershipRequests: currentMembershipRequests, contacts: targetOrganization.contacts},
       { withCredentials: true }
     );
     

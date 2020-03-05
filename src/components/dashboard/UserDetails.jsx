@@ -51,7 +51,6 @@ class UserDetails extends Component {
   }
 
   connect = () => {
-    console.log("Function connect() called");
     window.ethereum.enable().then(res => {
       this.setState({
         metamaskConnected: true,
@@ -61,28 +60,34 @@ class UserDetails extends Component {
   }
 
   confirmEthAddress = (metamaskResponse) => {
-    console.log(this.state.userProfile.ethAddresses)
-    console.log(this.state.activeMetamaskAddress)
     const ethAddresses = this.state.userProfile.ethAddresses
 
-    //Super-dangerous: absolutely need to change that before production!!!
     const ethAddressesToLowerCase = ethAddresses.map(ethAddress => {
       return ethAddress.toLowerCase()
     })
-    //
-
 
     if (metamaskResponse === null && ethAddressesToLowerCase.includes(this.state.activeMetamaskAddress)) {
-      this.setState({
-        validatedAddress: true
+      const userProfile = this.props.loggedInUser.profile;
+      const newValidatedAddress = this.state.activeMetamaskAddress;
+      const currentValidatedAddresses = this.props.loggedInUser.validatedEthAddresses;
+      var updatedValidatedAddresses;
+      if (currentValidatedAddresses && !currentValidatedAddresses.includes(newValidatedAddress)) {
+          updatedValidatedAddresses = currentValidatedAddresses.push(newValidatedAddress)
+      } else updatedValidatedAddresses = newValidatedAddress;
+
+      axios
+      .put(`http://localhost:5000/api/contacts/${userProfile}`, {validatedEthAddresses: updatedValidatedAddresses}, {withCredentials:true})
+      .then( () => {
+        this.setState({
+          validatedAddress: true
+        }) 
       })
+      .catch( error => console.log(error) )
     }
   }
 
   signMessage = () => {
-    console.log(window.web3)
     window.web3.personal.sign(window.web3.fromUtf8("Please sign this message to confirm Eth address. We do not get access to your private keys. Passport web3 team"), window.web3.eth.coinbase, this.confirmEthAddress)
-
   }
 
   renderEditForm = () => {
@@ -149,7 +154,7 @@ class UserDetails extends Component {
                     </Link>
                     </div>}
                     {this.state.userProfile && (this.props.loggedInUser._id === this.state.userProfile.owner) && <div>
-                    <h3>Eth authenticator</h3><br/>
+                    <h3>Eth address validator</h3><br/>
                     <p>Connect to metamask and sign a message to validate your address. We do not get access to your funds nor private keys.</p>
                     {this.state.activeMetamaskAddress && 
                       <div><br/>

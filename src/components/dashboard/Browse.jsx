@@ -19,7 +19,11 @@ const Results = props => (
         props.contacts.map((item, index) => (
         <Link to={`/contacts/${item._id}`}>
           <ul key={index}>
-            <li> {item.firstName} {item.lastName} (Contact)<img className='avatar' src={item.avatar} style={{float: 'right', verticalAlign: 'middle', width: '16px'}}/></li>
+            <li> {item.firstName} {item.lastName} (Contact)
+            <img className='avatar' src={item.avatar} style={{float: 'right', verticalAlign: 'middle', width: '16px'}}/>
+            {item.validatedEthAddresses.length > 0 && <img className='avatar' src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" style={{float: 'right', verticalAlign: 'middle', width: '16px'}}/>}
+            </li>
+
           </ul></Link>))
       }
       { props.files &&
