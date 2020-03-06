@@ -118,9 +118,10 @@ class FileList extends Component {
               </tbody>
             </table>
             <br/>
+            {this.props.buttons && 
             <Link to={`/files/new`}>
               <span className="btn btn-secondary btn-sm">Import files</span>
-            </Link>
+            </Link>}
           </div>
           <div style={{width: '60%', float:"left"}}>
         </div>

@@ -122,7 +122,7 @@ class Browse extends Component {
                     onChange={this.onChange}
                     />
                     <div style={{margin: "0 30px 0 30px"}}>
-                    <Results
+                  <Results
                     users={this.state.matchedUsers}
                     contacts={this.state.matchedContacts}
                     files={this.state.matchedFiles}

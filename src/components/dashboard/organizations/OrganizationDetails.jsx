@@ -31,17 +31,23 @@ class OrganizationDetails extends Component {
     console.log("getting organization")
       const { params } = this.props.match;
       const organizationId = params.id;
+      console.log(organizationId)
       const graph = this.props.graph;
-      const currentOrganization = graph[3].reduce(organization => {
-        if (organizationId.includes(organization._id)) {
+      const currentOrganization = graph[3].filter(organization => {
+        if (organizationId === organization._id) {
           return organization
         }
       })
-      if (currentOrganization.members.includes(this.props.loggedInUser._id)) {
-        this.setState({organization: currentOrganization, userIsMember: true});
-      } else {
-        this.setState({organization: currentOrganization, userIsMember: false});
+      const updatedOrganization = currentOrganization[0];
+      console.log(currentOrganization)
+      if (updatedOrganization) {
+        if (updatedOrganization.members.includes(this.props.loggedInUser._id)) {
+          this.setState({organization: updatedOrganization, userIsMember: true});
+        } else {
+          this.setState({organization: updatedOrganization, userIsMember: false});
+        }
       }
+        
   }
 
   getUserPermissions = () => {
@@ -285,16 +291,20 @@ class OrganizationDetails extends Component {
         <span style={{width: '50%', float:"left"}}>
         <div className="modal-dialog"><img className="avatar" style={{ verticalAlign: 'middle', width: '60px', float:"left", margin:"0 8px 0 0"}} src={this.state.organization.logo && this.state.organization.logo} alt="avatar"/><span><h1>{this.state.organization.title}</h1></span></div>
 
+        {this.state.organization && this.props.loggedInUser && this.state.organization.members && this.state.organization.members.includes(this.props.loggedInUser._id) && <div>
         <Browse graph={this.props.graph}/>
         <FileList graph={this.props.graph} files={this.state.organization.files} title={`${this.state.organization.title} Files`}/>
         <FileList graph={this.props.graph} files={this.state.organization.filesFromMembers} title={`Files shared by ${this.state.organization.title} members`}/>
         {/* <FileList graph={this.props.graph} files={this.state.organization.filesFromPartners} title={`Files shared by ${this.state.organization.title} partners`}/> */}
+        <ContactList graph={this.props.graph} contacts={this.state.organization.contacts} title={`${this.state.organization.title} contacts`}/>
         <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromMembers} title={`Contacts shared by ${this.state.organization.title} members`}/>
         {/* <ContactList graph={this.props.graph} contacts={this.state.organization.contactsFromPartners} title={`Contacts shared by ${this.state.organization.title} partners`}/> */}
-        <ContactList graph={this.props.graph} contacts={this.state.organization.contacts} title={`${this.state.organization.title} contacts`}/>
+        </div>}
         </span>
-        <span style={{width: '50%', float:"right"}}> 
+        <span style={{width: '50%', float:"right"}}>
+        {this.state.organization && this.props.loggedInUser && this.state.organization.members && this.state.organization.members.includes(this.props.loggedInUser._id) && <div> 
         <MembershipRequests membershipRequests={this.state.organization.membershipRequests} members={this.state.organization.members} organization={this.state.organization._id} updateOrganization={() => this.getSingleOrganization}/>
+        </div>}
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header p-4">
@@ -364,9 +374,11 @@ class OrganizationDetails extends Component {
                 </div>
                 </div>
                 </div>
-                <Members members={this.state.organization.members}/>
+                <Members loggedInUser={this.props.loggedInUser} members={this.state.organization.members}/>
+                {this.state.organization && this.props.loggedInUser && this.state.organization.members && this.state.organization.members.includes(this.props.loggedInUser._id) && <div>
                 <Owner owner={this.state.organization.owner}/>
                 <PartnershipRequests />
+                </div>}
                 <Partners />
             </span>
             </div>}

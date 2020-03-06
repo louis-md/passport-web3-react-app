@@ -12,12 +12,10 @@ class OrganizationList extends Component {
 
   getOrganizations = () => {
     const organizationsId = this.props.organizations;
-    console.log(organizationsId)
     const graph = this.props.graph;
     const listOfOrganizations = graph[3].filter(organization => {
       return organizationsId.includes(organization._id)
     })
-    console.log(listOfOrganizations)
     this.setState({listOfOrganizations: listOfOrganizations});
   }
 
@@ -78,9 +76,10 @@ class OrganizationList extends Component {
               </tbody>
             </table>
             <br/>
+            {this.props.buttons &&
             <Link to={`/organizations/new`}>
               <span className="btn btn-secondary btn-sm">Create organization</span>
-            </Link>
+            </Link>}
           </div>
           <div style={{width: '60%', float:"left"}}>
         </div>

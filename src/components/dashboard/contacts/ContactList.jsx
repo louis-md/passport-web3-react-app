@@ -16,8 +16,7 @@ class ContactList extends Component {
     const contactObjects = graph[1].filter(contact => {
       return contactList.includes(contact._id)
     })
-    console.log(this.props.contacts)
-
+    
     this.setState({listOfContacts: contactObjects});
   }
 
@@ -50,8 +49,8 @@ class ContactList extends Component {
                         </div>
                       </td>
                       <td>
-                        {(contact.validatedEthAddresses.length > 0) && <img style={{ float: "left", verticalAlign: 'middle', width: '40px'}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" alt="avatar"/>}
-                        <img className="avatar" style={{ verticalAlign: 'middle', width: '40px'}} src={contact.avatar && contact.avatar} alt="avatar"/>
+                        {(contact.validatedEthAddresses.length > 0) && <img style={{ float: "left", verticalAlign: 'middle', width: '36px'}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png" alt="avatar"/>}
+                        <img className="avatar" style={{ verticalAlign: 'bottom', width: '32px'}} src={contact.avatar && contact.avatar} alt="avatar"/>
                       </td>
                     </tr>
                   )})
@@ -68,6 +67,8 @@ class ContactList extends Component {
               </tbody>
             </table>
             <br/>
+            {this.props.buttons && 
+            <div>
             <span> 
             <Link to={`/new/`}>
               <button className="btn btn-secondary btn-sm">Create new contact</button>
@@ -77,6 +78,7 @@ class ContactList extends Component {
               <button className="btn btn-secondary btn-sm">Import contacts</button>
             </Link>
             </span>
+            </div>}
           </div>
           <div style={{width: '60%', float:"left"}}>
         </div>

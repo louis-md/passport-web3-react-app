@@ -34,7 +34,7 @@ export default class Dashboard extends Component {
                 </span>
                 <span style={{width: '50%', float:"right"}}>
                 <Invitations />
-                {this.props.graph && <OrganizationList graph={this.props.graph} title="Your organizations" organizations={this.getUserOrganizations()}/>    }
+                {this.props.graph && <OrganizationList buttons graph={this.props.graph} title="Your organizations" organizations={this.getUserOrganizations()}/>    }
                 </span>
             </div>
         )

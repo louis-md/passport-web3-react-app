@@ -46,13 +46,16 @@ class Members extends Component {
             </table>
             <br/>
             <span> 
-            <Link to={`/join/`}>
-                    <button className="btn btn-secondary btn-sm">Invite members</button>
-                    </Link>
-                    <span> </span>
-                    <Link to={`/join/`}>
+              <Link to={`/join/`}>
+                <button className="btn btn-secondary btn-sm">Invite members</button>
+              </Link>
+              <span> </span>
+              {this.props.members && this.props.loggedInUser && this.props.members.includes(this.props.loggedInUser._id) && <div>
+
+              <Link to={`/join/`}>
                     <button className="btn btn-secondary btn-sm">Manage members list</button>
                     </Link>
+              </div>}
             </span>
           </div>
           <div style={{width: '60%', float:"left"}}>

@@ -65,12 +65,24 @@ class AddFile extends Component {
     render() {
         return (
           <div>
+           <div className="modal-dialog">
+            <div className="modal-content">
+                <div className="modal-header p-4">
+                    <h5 className="modal-title text-primary font-weight-bold">Import new file</h5>
+                </div>
             <form onSubmit={e => this.handleSubmit(e)}>
-                {!this.props.updateAvatar && <label>Name</label>}
-                {!this.props.updateAvatar && <input type="text" name="name" value={ this.state.name } onChange={ e => this.handleChange(e)} />}
-                <input type="file" onChange={(e) => this.handleFileUpload(e)} /> 
-                {!this.props.updateAvatar && <button type="submit">Save new file</button>}
+            <div className="modal-body">
+                        <div className="form-group"></div>
+                {!this.props.updateAvatar && <label htmlFor="name">Name</label>}
+                {!this.props.updateAvatar && <input type="text" id="name" className="form-control" name="name" value={ this.state.name } onChange={ e => this.handleChange(e)} />}<br/><br/>
+                <label className="btn btn-secondary btn-sm">Select file...
+                <input className="form-control btn btn-secondary btn-sm" id="selectedFile" style={{display: "none"}} type="file" accept="*" onChange={(e) => this.handleFileUpload(e)} />
+                </label><span>  </span>
+                {!this.props.updateAvatar && <button className="btn btn-secondary btn-sm" type="submit">Upload</button>}
+                </div>
             </form>
+            </div>
+            </div>
           </div>
         );
     }

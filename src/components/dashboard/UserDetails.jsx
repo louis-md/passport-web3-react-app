@@ -16,6 +16,7 @@ import Partners from './organizations/Partners'
 import Browse from "./Browse"
 import OrganizationList from './organizations/OrganizationList';
 import ContactDetails from './contacts/ContactDetails'
+import FriendRequests from './contacts/FriendRequests'
 // import web3 from "web3"
 
 
@@ -135,9 +136,8 @@ class UserDetails extends Component {
       <div >
         <span style={{width: '50%', float:"left"}}>
         <div className="modal-dialog"><h1>User details</h1></div>
-        <OrganizationList />
-        <Friends />
-        </span>
+        <FriendRequests />
+        <ContactList buttons graph={this.props.graph} contacts="" title="Your friends"/>        </span>
         <span style={{width: '50%', float:"right"}}> 
         <ContactDetails contact={this.props.loggedInUser.profile} />
         <div className="modal-dialog">
@@ -162,7 +162,7 @@ class UserDetails extends Component {
                         <span><p style={{color: "limegreen", float:"left"}}> Connected to Metamask</p></span><br/><br/>
                         {this.state.validatedAddress && <div>
                           <span><img style={{width:"25px", float:"left"}} src="https://c7.uihere.com/icons/272/575/804/confirm-826b3f9c92bc3fb1463cd5d406a82fec.png"/></span>
-                          <span><p style={{color: "limegreen", float:"left"}}> Successfully validated ownership of <br/>{this.state.activeMetamaskAddress}!</p></span><br/><br/><br/>
+                          <span><p style={{color: "limegreen", float:"left"}}> Successfully validated <br/>{this.state.activeMetamaskAddress}!</p></span><br/><br/><br/>
                         </div>}
                       </div>}
                     <br/>
