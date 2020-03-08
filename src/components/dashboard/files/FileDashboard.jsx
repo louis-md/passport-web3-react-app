@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
-import FilesFromUsers from './FilesFromUsers'
-import FilesFromOrganizations from './FilesFromOrganizations'
 import FileList from './FileList'
 import Browse from '../Browse'
-import OrganizationDetails from '../organizations/OrganizationDetails'
-
 
 export default class Dashboard extends Component {
     constructor(props){

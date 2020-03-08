@@ -203,14 +203,14 @@ class App extends Component {
               getGraph={this.getGraph}
 
             />
-            {/* <ProtectedRoute
+            <ProtectedRoute
               user={this.state.loggedInUser}
               path="/remove/:id"
               component={EditContact}
               graph={this.state.graph}
               getGraph={this.getGraph}
 
-            /> */}
+            />
             <ProtectedRoute
               user={this.state.loggedInUser}
               path="/profile/:id"
@@ -240,8 +240,6 @@ class App extends Component {
               render={() => <Login getUser={this.getTheUser} />}
               component={Welcome}
             />
-            {/* <ProtectedRoute user={this.state.loggedInUser} path='/contacts/:id' component={ContactDetails} />
-              <ProtectedRoute user={this.state.loggedInUser} path='/contacts' component={ContactList} /> */}
           </Switch>
         </div>
       );
