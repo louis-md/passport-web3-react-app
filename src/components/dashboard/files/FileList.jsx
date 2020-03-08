@@ -28,7 +28,7 @@ class FileList extends Component {
   //       listOfFiles: responseFromApi.data
     //     })
 
-  //   axios.get(`http://localhost:5000/api/files`, {withCredentials:true})
+  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/files`, {withCredentials:true})
   //   .then(responseFromApi => {
   //     this.setState({
   //       listOfFiles: responseFromApi.data

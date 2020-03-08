@@ -26,7 +26,7 @@ class EditContact extends Component {
 
   getSingleContact = () => {
     const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/contacts/${params.id}`, {withCredentials:true})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${params.id}`, {withCredentials:true})
     .then( responseFromApi => {
       const theContact = responseFromApi.data;
       console.log(theContact)
@@ -98,7 +98,7 @@ class EditContact extends Component {
     };
 
     axios
-    .put(`http://localhost:5000/api/contacts/${params.id}`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
+    .put(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${params.id}`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
     .then( () => {
         // this.props.getData();
         window.location.assign('/contacts');    

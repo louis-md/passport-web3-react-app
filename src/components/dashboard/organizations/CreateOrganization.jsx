@@ -50,7 +50,7 @@ class CreateOrganization extends Component {
     
     axios
       .post(
-        "http://localhost:5000/api/organizations",
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations`,
         {
             title,
             description,
@@ -83,7 +83,7 @@ class CreateOrganization extends Component {
         } else userOrganizations = newOrganization;
 
         axios.put(
-          `http://localhost:5000/api/users/${userId}`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
           { organizations: userOrganizations},
           { withCredentials: true }
         ).then(()=> {

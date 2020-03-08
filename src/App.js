@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   getGraph = () => {
-      axios.get(`http://localhost:5000/api/graph`, {withCredentials:true})
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/graph`, {withCredentials:true})
       .then(responseFromApi => {
           this.setState({
           graph: responseFromApi.data
@@ -57,7 +57,7 @@ class App extends Component {
           });
           const userProfile = response.profile;
           axios
-            .get(`http://localhost:5000/api/contacts/${userProfile}`, {
+            .get(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${userProfile}`, {
               withCredentials: true
             })
             .then(responseFromApi => {

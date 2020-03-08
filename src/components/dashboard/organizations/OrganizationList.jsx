@@ -20,7 +20,7 @@ class OrganizationList extends Component {
   }
 
   // getAllOrganizations = () => {
-  //   axios.get(`http://localhost:5000/api/organizations`, {withCredentials:true})
+  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/organizations`, {withCredentials:true})
   //   .then(responseFromApi => {
   //     this.setState({
   //       listOfOrganizations: responseFromApi.data

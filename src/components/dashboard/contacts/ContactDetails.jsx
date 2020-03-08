@@ -23,7 +23,7 @@ class ContactDetails extends Component {
       const { params } = this.props.match;
       contact = params.id;
      }
-    axios.get(`http://localhost:5000/api/contacts/${contact}`, {withCredentials:true})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${contact}`, {withCredentials:true})
     .then( responseFromApi =>{
       const theContact = responseFromApi.data;
       this.setState(theContact);
@@ -44,7 +44,7 @@ class ContactDetails extends Component {
 // DELETE PROJECT:
   deleteContact = () => {
     const contact = this.props.contact;
-    axios.delete(`http://localhost:5000/api/contacts/${contact}`, {withCredentials:true})
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${contact}`, {withCredentials:true})
     .then( () =>{
         window.location.assign('/contacts'); // !!!         
     })

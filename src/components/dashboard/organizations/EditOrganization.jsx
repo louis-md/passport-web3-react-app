@@ -23,7 +23,7 @@ class EditOrganization extends Component {
 
   getSingleOrganization = () => {
     const { params } = this.props.match;
-    axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`, {withCredentials:true})
     .then( responseFromApi => {
       const theOrganization = responseFromApi.data;
       console.log(theOrganization)
@@ -52,7 +52,7 @@ class EditOrganization extends Component {
     const postalAddresses = this.state.postalAddresses;
 
     axios
-    .put(`http://localhost:5000/api/organizations/${params.id}`, {title, contactEmail, phoneNumbers, ethAddresses, postalAddresses, logo}, {withCredentials:true})
+    .put(`${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`, {title, contactEmail, phoneNumbers, ethAddresses, postalAddresses, logo}, {withCredentials:true})
     .then( () => {
         // this.props.getData();
         window.location.assign(`/organizations/${params.id}`);    

@@ -95,13 +95,13 @@ class OrganizationDetails extends Component {
       })
 
       const updatePermissionsCall = axios.put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       );
   
       const updateContactsCall = axios.put(
-        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${targetOrganization}`,
         { contactsFromMembers: updatedContacts},
         { withCredentials: true }
       );
@@ -123,13 +123,13 @@ class OrganizationDetails extends Component {
       }
 
       const updatePermissionsCall = axios.put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       );
   
       const updateContactsCall = axios.put(
-        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${targetOrganization}`,
         { contactsFromMembers: updatedContacts},
         { withCredentials: true }
       );
@@ -145,7 +145,7 @@ class OrganizationDetails extends Component {
 
       axios
       .put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       )
@@ -184,13 +184,13 @@ class OrganizationDetails extends Component {
       })
 
       const updatePermissionsCall = axios.put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       );
   
       const updateFilesCall = axios.put(
-        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${targetOrganization}`,
         { filesFromMembers: updatedFiles},
         { withCredentials: true }
       );
@@ -207,13 +207,13 @@ class OrganizationDetails extends Component {
       const updatedFiles = currentFiles.concat(filesToAdd);
 
       const updatePermissionsCall = axios.put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       );
   
       const updateFilesCall = axios.put(
-        `http://localhost:5000/api/organizations/${targetOrganization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${targetOrganization}`,
         { filesFromMembers: updatedFiles},
         { withCredentials: true }
       );
@@ -229,7 +229,7 @@ class OrganizationDetails extends Component {
 
       axios
       .put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
         { organizations: updatedOrganizations},
         { withCredentials: true }
       )
@@ -255,7 +255,7 @@ class OrganizationDetails extends Component {
 // DELETE ORGANIZATION:
   deleteOrganization = () => {
     const { params } = this.props.match;
-    axios.delete(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`, {withCredentials:true})
     .then( () =>{
     })
     .catch((err)=>{

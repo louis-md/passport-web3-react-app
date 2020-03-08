@@ -42,7 +42,7 @@ class AddContact extends Component {
 
     const avatar = "";
 
-    axios.post("http://localhost:5000/api/contacts", {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/contacts`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
     .then((response) => {
         this.setState({
             firstName:'',
@@ -60,7 +60,7 @@ class AddContact extends Component {
             user.contacts.push(response.data._id)
         } else user.contacts = response.data._id;
 
-        axios.put(`http://localhost:5000/api/users/${user._id}`, {contacts: user.contacts})
+        axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user._id}`, {contacts: user.contacts})
         .then(() => {
             console.log("done!")
             window.location.assign('/contacts');    

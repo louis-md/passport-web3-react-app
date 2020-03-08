@@ -21,7 +21,7 @@ class MembershipRequests extends Component {
     
     axios
       .put(
-        `http://localhost:5000/api/organizations/${organization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${organization}`,
         { membershipRequests: newMembershipRequests, members: newMembers},
         { withCredentials: true }
       )
@@ -36,7 +36,7 @@ class MembershipRequests extends Component {
 
     axios
       .put(
-        `http://localhost:5000/api/organizations/${organization}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${organization}`,
         { membershipRequests: newMembershipRequests},
         { withCredentials: true }
       )

@@ -36,7 +36,7 @@ class UserDetails extends Component {
     const profile = this.props.loggedInUser.profile;
     console.log(profile)
 
-    axios.get(`http://localhost:5000/api/contacts/${profile}`, {withCredentials:true})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${profile}`, {withCredentials:true})
     .then( responseFromApi =>{
       const theContact = responseFromApi.data;
       console.log(theContact)
@@ -73,7 +73,7 @@ class UserDetails extends Component {
       } else updatedValidatedAddresses = newValidatedAddress;
 
       axios
-      .put(`http://localhost:5000/api/contacts/${userProfile}`, {validatedEthAddresses: updatedValidatedAddresses}, {withCredentials:true})
+      .put(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${userProfile}`, {validatedEthAddresses: updatedValidatedAddresses}, {withCredentials:true})
       .then( () => {
         this.setState({
           validatedAddress: true
@@ -99,7 +99,7 @@ class UserDetails extends Component {
 // DELETE ORGANIZATION:
   deleteOrganization = () => {
     const { params } = this.props.match;
-    axios.delete(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`, {withCredentials:true})
     .then( () =>{
         window.location.assign('/organizations');        
     })

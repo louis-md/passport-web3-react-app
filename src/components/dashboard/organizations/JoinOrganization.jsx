@@ -23,7 +23,7 @@ class JoinOrganization extends Component {
   getOrganization = () => {
     const { params } = this.props.match;
     const fromId = this.props.loggedInUser._id;
-    axios.get(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`, {withCredentials:true})
     .then( responseFromApi => {
       const theOrganization = responseFromApi.data;
           this.setState({
@@ -64,13 +64,13 @@ class JoinOrganization extends Component {
     console.log(`updated contacts :${targetOrganization.contacts}`)
 
     const requestCall = axios.put(
-      `http://localhost:5000/api/organizations/${params.id}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/organizations/${params.id}`,
       { membershipRequests: currentMembershipRequests, contacts: targetOrganization.contacts},
       { withCredentials: true }
     );
     
     const shareProfileCall = axios.put(
-      `http://localhost:5000/api/users/${userId}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}`,
       { organizations: userOrganizations},
       { withCredentials: true }
     )
