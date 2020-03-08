@@ -25,8 +25,9 @@ class Signup extends Component {
             email: "", 
             password: "",
         });
-        this.props.getUser(response)
-    })
+        this.props.getUser(response);
+        window.location.assign("/")
+      })
     .catch( error => console.log(error) )
   }
   
@@ -63,8 +64,15 @@ class Signup extends Component {
                 <input id="password" className="form-control" type="password" name="password" placeholder="************" required value={this.state.password} onChange={ e => this.handleChange(e)} />
               </div>
                 <small>
-                  <p className="text-primary">Do you already have an account? Login 
-                  <div
+                  <button
+                  data-toggle="modal"
+                  data-target="#login-oy2nrmz20"
+                >
+                  <p style={{color: "blue"}} className="d-flex align-items-center">
+                  Do you already have an account? Login
+                  </p>
+                </button>
+                <div
                   className="modal fade"
                   id="login-oy2nrmz20"
                   tabIndex="-1"
@@ -73,8 +81,28 @@ class Signup extends Component {
                   style={{ display: "none" }}
                   aria-hidden="true"
                 >
-                <Login />
-                </div></p>
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content text-left text-dark">
+                      <div className="modal-header p-4">
+                        <h5
+                          className="modal-title text-primary font-weight-bold"
+                          id="modal-title-login-oy2nrmz20"
+                        >
+                          Log in
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">×</span>
+                        </button>
+                      </div>
+                      <Login />
+                    </div>
+                  </div>
+                </div>
               </small>
             </div>
               <div className="modal-footer">

@@ -105,7 +105,7 @@ class CreateOrganization extends Component {
             publicContacts: [],
             privateContacts: []
         });
-        this.props.history.push("/organizations");
+        window.location.assign("/organizations");
         })
         console.log(`Joining organization, new permitted organizations: ${JSON.stringify(userOrganizations)}`)        
       })

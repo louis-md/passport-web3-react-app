@@ -7,10 +7,6 @@ import FileList from "../files/FileList";
 import ContactList from "../contacts/ContactList";
 import MembershipRequests from "./MembershipRequests.jsx";
 import PartnershipRequests from "./PartnershipRequests.jsx";
-import FilesFromOrganizations from '../files/FilesFromOrganizations';
-import FilesFromUsers from '../files/FilesFromUsers';
-import ContactsFromUsers from '../contacts/ContactsFromUsers'
-import ContactsFromOrganizations from '../contacts/ContactsFromOrganizations'
 import Partners from './Partners'
 import Browse from "../Browse"
 import Owner from './Owner.jsx'
@@ -28,10 +24,8 @@ class OrganizationDetails extends Component {
   }
 
   getSingleOrganization = () => {
-    console.log("getting organization")
       const { params } = this.props.match;
       const organizationId = params.id;
-      console.log(organizationId)
       const graph = this.props.graph;
       const currentOrganization = graph[3].filter(organization => {
         if (organizationId === organization._id) {
@@ -39,7 +33,6 @@ class OrganizationDetails extends Component {
         }
       })
       const updatedOrganization = currentOrganization[0];
-      console.log(currentOrganization)
       if (updatedOrganization) {
         if (updatedOrganization.members.includes(this.props.loggedInUser._id)) {
           this.setState({organization: updatedOrganization, userIsMember: true});
@@ -53,15 +46,24 @@ class OrganizationDetails extends Component {
   getUserPermissions = () => {
     const { params } = this.props.match;
     const userOrganizations = this.props.loggedInUser.organizations;
-    const updatedPermissions = userOrganizations.map(organizations => {
+    const currentPermissions = userOrganizations.map(organizations => {
+      if (organizations) {
       if (organizations.organizationId === params.id) {
         return organizations
-      }
+      } else return false
+    }
     })
-
-    this.setState({
-      hasAccessToMyContacts: updatedPermissions.hasAccessToMyContacts, 
-      hasAccessToMyFiles: updatedPermissions.hasAccessToMyFiles})
+      const updatedPermissions = currentPermissions[0]
+      if (updatedPermissions) {
+      this.setState({
+        hasAccessToMyContacts: updatedPermissions.hasAccessToMyContacts, 
+        hasAccessToMyFiles: updatedPermissions.hasAccessToMyFiles})
+    } else {
+      this.setState({
+        hasAccessToMyContacts: false, 
+        hasAccessToMyFiles: false})
+    }
+    
 
   }
   
@@ -70,17 +72,17 @@ class OrganizationDetails extends Component {
     const userOrganizations = this.props.loggedInUser.organizations;
     const targetOrganization = this.state.organization._id;
     const updatedOrganizations = userOrganizations.map((organizations) => {
+      if (organizations) {
       if (organizations.organizationId === targetOrganization) {
-        console.log("found the organization, now replacing permission")
         const updatedOrganization = {
           _id: organizations._id,
           organizationId: organizations.organizationId,
           hasAccessToMyContacts: !organizations.hasAccessToMyContacts,
           hasAccessToMyFiles: organizations.hasAccessToMyFiles
         }
-        console.log(`new permission: ${JSON.stringify(updatedOrganization)}`)
         return updatedOrganization;
       }
+    }
     })
 
     if (this.state.hasAccessToMyContacts && this.props.loggedInUser.contacts) {
@@ -115,12 +117,10 @@ class OrganizationDetails extends Component {
       const currentContacts = this.state.organization.contactsFromMembers;
       var updatedContacts;
       if (currentContacts) {
-        console.log("coucou")
         updatedContacts = currentContacts.concat(contactsToAdd)
       } else {
         updatedContacts = contactsToAdd
       }
-      console.log(`${currentContacts}`)
 
       const updatePermissionsCall = axios.put(
         `http://localhost:5000/api/users/${userId}`,
@@ -162,6 +162,7 @@ class OrganizationDetails extends Component {
     const userOrganizations = this.props.loggedInUser.organizations;
     const targetOrganization = this.state.organization._id;
     const updatedOrganizations = userOrganizations.map((organizations) => {
+      if (organizations) {
       if (organizations.organizationId === targetOrganization) {
         const updatedOrganization = {
           _id: organizations._id,
@@ -171,6 +172,7 @@ class OrganizationDetails extends Component {
         }
         return updatedOrganization;
       }
+    }
     })
 
     if (this.state.hasAccessToMyFiles && this.props.loggedInUser.files) {
@@ -255,7 +257,6 @@ class OrganizationDetails extends Component {
     const { params } = this.props.match;
     axios.delete(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
     .then( () =>{
-        this.props.history.push('/organizations'); // !!!         
     })
     .catch((err)=>{
         console.log(err)

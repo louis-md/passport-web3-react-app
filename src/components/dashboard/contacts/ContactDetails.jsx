@@ -46,7 +46,7 @@ class ContactDetails extends Component {
     const contact = this.props.contact;
     axios.delete(`http://localhost:5000/api/contacts/${contact}`, {withCredentials:true})
     .then( () =>{
-        this.props.history.push('/contacts'); // !!!         
+        window.location.assign('/contacts'); // !!!         
     })
     .catch((err)=>{
         console.log(err)

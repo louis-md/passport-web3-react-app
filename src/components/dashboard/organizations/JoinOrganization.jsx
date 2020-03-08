@@ -83,7 +83,7 @@ class JoinOrganization extends Component {
           fromId: "",
           message: ""
         });
-        this.props.history.push(`/organizations/${targetOrganization._id}`);
+        window.location.assign(`/organizations/${targetOrganization._id}`);
       })
       .catch(error => console.log(error));
   };

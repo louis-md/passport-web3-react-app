@@ -4,8 +4,6 @@ import Friends from './Friends'
 import ContactList from './ContactList'
 import Browse from '../Browse'
 import FriendRequests from './FriendRequests'
-import ContactsFromUsers from './ContactsFromUsers'
-import ContactsFromOrganizations from './ContactsFromOrganizations'
 
 export default class Dashboard extends Component {
     constructor(props){
@@ -13,47 +11,62 @@ export default class Dashboard extends Component {
     }
 
     getContactsFromMembers = (organizationId) => {
+
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
-                return organization.contactsFromMembers
-            }
+                return organization
+            } else return null
         })
-        return organizationObject.contactsFromMembers;
+
+        if (organizationObject) {
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].contactsFromMembers;
+        }
     }
 
-    getContactsFromPartners = (organizationId) => {
-        const graph = this.props.graph;
-        const listOfOrganizations = graph[3].reduce(organization => {
-            if (organizationId === organization._id) {
-                return organization.contactsFromPartners
-            }
-        })
-        // this.setState({listOfOrganizations: listOfOrganizations});
-    }
+    // getContactsFromPartners = (organizationId) => {
+    //     const graph = this.props.graph;
+    //     const listOfOrganizations = graph[3].reduce(organization => {
+    //         if (organizationId === organization._id) {
+    //             return organization.contactsFromPartners
+    //         }
+    //     })
+    //     // this.setState({listOfOrganizations: listOfOrganizations});
+    // }
 
     getContacts = (organizationId) => {
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
                 return organization
-            }
+            } else return null
         })
 
-        return organizationObject.contacts;
-        // this.setState({listOfOrganizations: listOfOrganizations});
+        if (organizationObject) {
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].contacts;
+        }
     }
 
     getTitle = (organizationId) => {
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
+                console.log(organization)
                 return organization
-            }
+            } else return null
         })
+        if (organizationObject) {
 
-        return organizationObject.title;
-        // this.setState({listOfOrganizations: listOfOrganizations});
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].title;        }
     }
 
     render() {
@@ -72,8 +85,8 @@ export default class Dashboard extends Component {
                     {this.props.loggedInUser && this.props.graph && this.props.loggedInUser.organizations.map((organization) => {
                     return (
                     <div>{this.props.graph && this.props.loggedInUser && <div>
-                    <ContactList graph={this.props.graph} contacts={this.getContacts(organization)} title={`${this.getTitle(organization)} shared:`}/>
-                    <ContactList graph={this.props.graph} contacts={this.getContactsFromMembers(organization)} title={`${this.getTitle(organization)} members shared:`}/>
+                    {organization && this.getContacts(organization.organizationId) && <ContactList graph={this.props.graph} contacts={this.getContacts(organization.organizationId)} title={`${this.getTitle(organization.organizationId)} shared:`}/>}
+                    {organization && this.getContactsFromMembers(organization.organizationId) && <ContactList graph={this.props.graph} contacts={this.getContactsFromMembers(organization.organizationId)} title={`${this.getTitle(organization.organizationId)} members shared:`}/>}
                     {/* <ContactList graph={this.props.graph} contacts={this.getContactsFromPartners(organization)} title=""/> */}
                     </div>}
                     </div>

@@ -14,9 +14,9 @@ class FileList extends Component {
     const filesId = this.props.files;
     const graph = this.props.graph;
     const listOfFiles = graph[2].filter(file => {
+      if (filesId)
       return filesId.includes(file._id)
     })
-
     this.setState({listOfFiles: listOfFiles});
   }
   //   openMediaLibrary()
@@ -99,7 +99,7 @@ class FileList extends Component {
                       <td key={file}>
                         {/* <Link to={`/contacts/${contacts}`}> */}
                         
-                          <span style={{width: '50%', float:"left"}}><h3 key={file}>{file.name}</h3></span>
+                          <span style={{width: '50%', float:"left"}}><h4 key={file}>{file.name}</h4></span>
                           <a href={file.fileUrl}><span style={{width: '50%', float:"right"}} key={file}>{file._id}</span></a>
                         {/* </Link> */}
                       </td>

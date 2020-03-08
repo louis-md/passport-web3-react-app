@@ -20,7 +20,9 @@ export default class Dashboard extends Component {
     getUserOrganizations = () => {
         const userOrganizations = this.props.loggedInUser.organizations;
         const userOrganizationsId = userOrganizations.map(organization => {
+            if (organization) {
             return organization.organizationId
+            }
           })
         return userOrganizationsId;
     }

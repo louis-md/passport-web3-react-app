@@ -54,9 +54,6 @@ class Navbar extends Component {
                 Organizations
               </Link>
             </span>
-            {/* <span className="navbar-brand font-weight-bold">
-              <Link to={`/profile/${this.state.loggedInUser.profile}`} style={{ textDecoration: "none" }}>My profile</Link>
-            </span> */}
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav ml-auto mr-5"></div>
               <div className="my-2 my-sm-0">
@@ -104,8 +101,16 @@ class Navbar extends Component {
                 </div>
               </div>
             </div>
-            <Link to={`/users/${this.state.loggedInUser._id}`} style={{ textDecoration: "none" }}>
-            <img className="avatar" style={{width: '50px', margin: "3px 0 0 25px"}} src={this.props.userProfile && this.props.userProfile.avatar} alt="avatar"/>
+            <Link
+              to={`/users/${this.state.loggedInUser._id}`}
+              style={{ textDecoration: "none" }}
+            >
+              <img
+                className="avatar"
+                style={{ width: "50px", margin: "3px 0 0 25px" }}
+                src={this.props.userProfile && this.props.userProfile.avatar}
+                alt="avatar"
+              />
             </Link>
           </div>
         </nav>

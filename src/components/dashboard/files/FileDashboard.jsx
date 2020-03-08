@@ -3,6 +3,7 @@ import FilesFromUsers from './FilesFromUsers'
 import FilesFromOrganizations from './FilesFromOrganizations'
 import FileList from './FileList'
 import Browse from '../Browse'
+import OrganizationDetails from '../organizations/OrganizationDetails'
 
 
 export default class Dashboard extends Component {
@@ -12,17 +13,22 @@ export default class Dashboard extends Component {
 
     getFilesFromMembers = (organizationId) => {
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
                 return organization
             }
         })
-        return organizationObject.filesFromMembers;
+        if (organizationObject) {
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].filesFromMembers;
+        }
     }
 
     // getContactsFromPartners = (organizationId) => {
     //     const graph = this.props.graph;
-    //     const listOfOrganizations = graph[3].reduce(organization => {
+    //     const listOfOrganizations = graph[3].map(organization => {
     //         if (organizationId === organization._id) {
     //             return organization
     //         }
@@ -32,23 +38,31 @@ export default class Dashboard extends Component {
 
     getFiles = (organizationId) => {
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
                 return organization
             }
         })
-        console.log(organizationObject)
-            return organizationObject.files;
+        if (organizationObject) {
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].files;        }
     }
 
     getTitle = (organizationId) => {
         const graph = this.props.graph;
-        const organizationObject = graph[3].reduce(organization => {
+        const organizationObject = graph[3].map(organization => {
             if (organizationId === organization._id) {
                 return organization
             }
         })
-        return organizationObject.title;
+        if (organizationObject) {
+            const filterNulls = organizationObject.filter(objects => {
+                if (objects) return objects
+            })
+        return filterNulls[0].title;
+        }
     }
 
     render() {
@@ -62,8 +76,8 @@ export default class Dashboard extends Component {
                     {this.props.loggedInUser && this.props.graph && this.props.loggedInUser.organizations.map((organization) => {
                     return (
                     <div>{this.props.graph && this.props.loggedInUser && <div>
-                    {organization.length && <FileList graph={this.props.graph} files={this.getFiles(organization)} title={`${this.getTitle(organization)} shared:`}/>}
-                    {organization.length && <FileList graph={this.props.graph} files={this.getFilesFromMembers(organization)} title={`${this.getTitle(organization)} members shared:`}/>}
+                    {organization && this.getFiles(organization.organizationId) && (this.getFiles(organization.organizationId).length > 0) && <FileList graph={this.props.graph} files={this.getFiles(organization.organizationId)} title={`${this.getTitle(organization.organizationId)} shared:`}/>}
+                    {organization && this.getFilesFromMembers(organization.organizationId) && (this.getFilesFromMembers(organization.organizationId).length > 0) && <FileList graph={this.props.graph} files={this.getFilesFromMembers(organization.organizationId)} title={`${this.getTitle(organization.organizationId)} members shared:`}/>}
                     {/* <FileList graph={this.props.graph} files={this.getFilesFromPartners(organization)} title=""/> */}
                     </div>}
                     </div>
@@ -73,7 +87,7 @@ export default class Dashboard extends Component {
                 <span style={{width: '50%', float:"left"}}>
                     <div className="modal-dialog"><h1>Files</h1></div>
                     <Browse graph={this.props.graph}/>
-                    <FileList graph={this.props.graph} files={this.props.loggedInUser.files} title="Your files"/>  
+                    <FileList buttons graph={this.props.graph} files={this.props.loggedInUser.files} title="Your files"/>  
                 </span>
             </div>
         )

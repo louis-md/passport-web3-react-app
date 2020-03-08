@@ -8,7 +8,9 @@ export default class Dashboard extends Component {
     getUserOrganizations = () => {
         const userOrganizations = this.props.loggedInUser.organizations;
         const userOrganizationsId = userOrganizations.map(organization => {
+            if (organization) {
             return organization.organizationId
+            }
           })
         return userOrganizationsId;
     }
@@ -17,11 +19,11 @@ export default class Dashboard extends Component {
             <div>
                 <Browse graph={this.props.graph}/>
                 <span style={{width: '50%', float:"left"}}>
-                <FileList files={this.props.loggedInUser.files} title="Your files" graph={this.props.graph}/>
+                <FileList buttons files={this.props.loggedInUser.files} title="Your files" graph={this.props.graph}/>
                 </span>
                 <span style={{width: '50%', float:"right"}}>
-                {this.props.graph && this.props.loggedInUser.organizations && <OrganizationList graph={this.props.graph} title="Your organizations" organizations={this.getUserOrganizations()}/>}
-                <ContactList graph={this.props.graph} contacts={this.props.loggedInUser.contacts} title="Your contacts"/>
+                {this.props.graph && this.props.loggedInUser.organizations && <OrganizationList buttons graph={this.props.graph} title="Your organizations" organizations={this.getUserOrganizations()}/>}
+                <ContactList buttons graph={this.props.graph} contacts={this.props.loggedInUser.contacts} title="Your contacts"/>
                 </span>
             </div>
         )

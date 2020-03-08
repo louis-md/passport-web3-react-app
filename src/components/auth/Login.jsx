@@ -45,7 +45,7 @@ class Login extends Component {
             </div>
             <div className="modal-footer p-4">
             <small>
-                <span className="text-primary"><Link to={"/signup"}>Don't have an account yet? Signup</Link></span> 
+                <span className="text-primary"><a href="/signup">Don't have an account yet? Signup</a></span> 
             </small>
             <button type="submit" className="btn btn-primary">Log in</button>
           </div>

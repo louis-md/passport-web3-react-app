@@ -54,7 +54,7 @@ class AddFile extends Component {
             axios.put(`http://localhost:5000/api/users/${user._id}`, {files: user.files})
             .then(() => {
                 console.log("done!")
-                this.props.history.push('/files');
+                window.location.assign('/files');
             })    
         })
         .catch(err => {

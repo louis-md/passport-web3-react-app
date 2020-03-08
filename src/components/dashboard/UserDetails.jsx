@@ -8,10 +8,6 @@ import FileList from "./files/FileList";
 import ContactList from "./contacts/ContactList";
 import MembershipRequests from "./organizations/MembershipRequests.jsx";
 import PartnershipRequests from "./organizations/PartnershipRequests.jsx";
-import FilesFromOrganizations from './files/FilesFromOrganizations';
-import FilesFromUsers from './files/FilesFromUsers';
-import ContactsFromUsers from './contacts/ContactsFromUsers'
-import ContactsFromOrganizations from './contacts/ContactsFromOrganizations'
 import Partners from './organizations/Partners'
 import Browse from "./Browse"
 import OrganizationList from './organizations/OrganizationList';
@@ -81,7 +77,8 @@ class UserDetails extends Component {
       .then( () => {
         this.setState({
           validatedAddress: true
-        }) 
+        });
+        window.location.reload()
       })
       .catch( error => console.log(error) )
     }
@@ -104,7 +101,7 @@ class UserDetails extends Component {
     const { params } = this.props.match;
     axios.delete(`http://localhost:5000/api/organizations/${params.id}`, {withCredentials:true})
     .then( () =>{
-        this.props.history.push('/organizations'); // !!!         
+        window.location.assign('/organizations');        
     })
     .catch((err)=>{
         console.log(err)

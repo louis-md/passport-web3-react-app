@@ -13,7 +13,7 @@ export default class Welcome extends Component {
                         <h5>Private profiles & file sharing using web3.js</h5>
                         <br/><br/>
                         <article>
-                            <p>Dear internet traveller,<br/>
+                            <p>Hello internet traveller,<br/>
                              This small website is intended to be an introduction to the web3, as well as a nice interface for storing files and web3 user profiles collaboratively. </p><br/><br/>
                             <a href="/signup" style={{color: 'white'}}><button className="btn btn-secondary btn-sm">Get Started!</button></a>
                         </article>

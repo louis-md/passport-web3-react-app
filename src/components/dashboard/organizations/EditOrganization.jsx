@@ -55,7 +55,7 @@ class EditOrganization extends Component {
     .put(`http://localhost:5000/api/organizations/${params.id}`, {title, contactEmail, phoneNumbers, ethAddresses, postalAddresses, logo}, {withCredentials:true})
     .then( () => {
         // this.props.getData();
-        this.props.history.push(`/organizations/${params.id}`);    
+        window.location.assign(`/organizations/${params.id}`);    
     })
     .catch( error => console.log(error) )
   }

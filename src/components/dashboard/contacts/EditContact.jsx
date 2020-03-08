@@ -101,7 +101,7 @@ class EditContact extends Component {
     .put(`http://localhost:5000/api/contacts/${params.id}`, {firstName, lastName, bio, secondaryEmails, phoneNumbers, ethAddresses, postalAddresses, socialAccounts, avatar}, {withCredentials:true})
     .then( () => {
         // this.props.getData();
-        this.props.history.push('/contacts');    
+        window.location.assign('/contacts');    
     })
     .catch( error => console.log(error) )
   }

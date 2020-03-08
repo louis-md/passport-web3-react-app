@@ -63,7 +63,7 @@ class AddContact extends Component {
         axios.put(`http://localhost:5000/api/users/${user._id}`, {contacts: user.contacts})
         .then(() => {
             console.log("done!")
-            this.props.history.push('/contacts');    
+            window.location.assign('/contacts');    
         }).catch(error => console.log(error))
     })
     .catch( error => console.log(error) )
