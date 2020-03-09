@@ -18,10 +18,9 @@ import axios from "axios";
 import OrganizationDashboard from "./components/dashboard/organizations/OrganizationDashboard";
 import CreateOrganization from "./components/dashboard/organizations/CreateOrganization";
 import OrganizationDetails from "./components/dashboard/organizations/OrganizationDetails";
-import JoinOrganization from './components/dashboard/organizations/JoinOrganization'
+import JoinOrganization from "./components/dashboard/organizations/JoinOrganization";
 import UserDetails from "./components/dashboard/UserDetails";
-import EditOrganization from "./components/dashboard/organizations/EditOrganization"
-
+import EditOrganization from "./components/dashboard/organizations/EditOrganization";
 
 class App extends Component {
   constructor(props) {
@@ -35,16 +34,20 @@ class App extends Component {
   }
 
   getGraph = () => {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/graph`, {withCredentials:true})
-      .then(responseFromApi => {
-          this.setState({
-          graph: responseFromApi.data
-          })
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/graph`, {
+        withCredentials: true
       })
-  }
+      .then(responseFromApi => {
+        this.setState({
+          graph: responseFromApi.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
 
   componentDidMount() {
-  this.getGraph();
+    this.getGraph();
   }
 
   fetchUser() {
@@ -57,9 +60,12 @@ class App extends Component {
           });
           const userProfile = response.profile;
           axios
-            .get(`${process.env.REACT_APP_BACKEND_URL}/api/contacts/${userProfile}`, {
-              withCredentials: true
-            })
+            .get(
+              `${process.env.REACT_APP_BACKEND_URL}/api/contacts/${userProfile}`,
+              {
+                withCredentials: true
+              }
+            )
             .then(responseFromApi => {
               const theContact = responseFromApi.data;
               this.setState({ userProfile: theContact });
@@ -99,7 +105,6 @@ class App extends Component {
               component={ContactDetails}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -116,7 +121,6 @@ class App extends Component {
               component={CreateOrganization}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -125,15 +129,13 @@ class App extends Component {
               component={EditOrganization}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
-             <ProtectedRoute
+            <ProtectedRoute
               user={this.state.loggedInUser}
               path="/users/:id"
               component={UserDetails}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
@@ -141,7 +143,6 @@ class App extends Component {
               component={JoinOrganization}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -150,7 +151,6 @@ class App extends Component {
               component={OrganizationDetails}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -159,7 +159,6 @@ class App extends Component {
               component={OrganizationDashboard}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -168,7 +167,6 @@ class App extends Component {
               component={AddFile}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               exact
@@ -177,7 +175,6 @@ class App extends Component {
               component={FileDashboard}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
@@ -185,7 +182,6 @@ class App extends Component {
               component={ContactDashboard}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
@@ -193,7 +189,6 @@ class App extends Component {
               component={AddContact}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
@@ -201,7 +196,6 @@ class App extends Component {
               component={EditContact}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
@@ -209,7 +203,6 @@ class App extends Component {
               component={EditContact}
               graph={this.state.graph}
               getGraph={this.getGraph}
-
             />
             <ProtectedRoute
               user={this.state.loggedInUser}
