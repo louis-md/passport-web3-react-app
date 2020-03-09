@@ -60,7 +60,7 @@ class AddContact extends Component {
             user.contacts.push(response.data._id)
         } else user.contacts = response.data._id;
 
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user._id}`, {contacts: user.contacts})
+        axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user._id}`, {contacts: user.contacts}, {withCredentials: true})
         .then(() => {
             console.log("done!")
             window.location.assign('/contacts');    

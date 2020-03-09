@@ -51,7 +51,7 @@ class AddFile extends Component {
                 user.files.push(res._id)
             } else user.files = res._id;
 
-            axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user._id}`, {files: user.files})
+            axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user._id}`, {files: user.files}, {withCredentials:true})
             .then(() => {
                 console.log("done!")
                 window.location.assign('/files');
